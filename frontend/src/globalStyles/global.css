@@ -1,0 +1,10 @@
+@import "tailwindcss";
+/* Layout.css o Inicio.css */
+
+.pantalla-contenido {
+    /* Le damos un padding base de 20px, y le SUMAMOS el tamaño del notch */
+    padding-top: calc(20px + env(safe-area-inset-top));
+
+
+
+}
