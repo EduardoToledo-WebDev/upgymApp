@@ -18,9 +18,9 @@ export default function Layout({ userData }) {
                     <span>INICIO</span>
                 </Link>
 
-                <Link to="/entrenar" className={`nav-item ${location.pathname === '/entrenar' ? 'active' : ''}`}>
+                <Link to="/rutinas" className={`nav-item ${location.pathname === '/rutinas' ? 'active' : ''}`}>
                     <Dumbbell size={24} />
-                    <span>ENTRENAR</span>
+                    <span>RUTINAS</span>
                 </Link>
 
                 <Link to="/puntaje" className={`nav-item ${location.pathname === '/puntaje' ? 'active' : ''}`}>
