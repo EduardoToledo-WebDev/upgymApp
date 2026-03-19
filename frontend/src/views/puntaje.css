@@ -117,3 +117,11 @@
     background-color: #FF4D00;
     color: white;
 }
+
+.activo {
+    color: red;
+}
+
+.inactivo {
+    color: black;
+}
