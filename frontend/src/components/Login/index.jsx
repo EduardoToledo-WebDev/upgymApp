@@ -14,6 +14,7 @@ function Login({ onLoginSuccess }) {
     const [errorMessage, setErrorMessage] = useState('');
     const [ventanaRegister, setVentanaRegister] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+
     const handleLogin = (e) => {
         e.preventDefault();
         setErrorMessage('');
@@ -54,7 +55,7 @@ function Login({ onLoginSuccess }) {
 
     return (
         <>
-            <div className="w-full h-screen flex justify-center items-center font-sans bg-gray-100">
+            <div className={ventanaRegister ? "hidden" : "w-full h-screen flex justify-center items-center font-sans bg-gray-100"}>
                 <form
                     className="bg-white p-10 rounded-xl w-full max-w-md flex flex-col shadow-lg"
                     onSubmit={handleLogin}
