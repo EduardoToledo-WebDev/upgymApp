@@ -4,38 +4,16 @@ import { useEffect } from "react";
 import logo from '../../assets/LogoUpgym.png';
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
+import { useDbRegister } from "./dbRegister";
 
 function Register({ ventanaRegister, setVentanaRegister }) {
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
     const [email, setEmail] = useState('');
     const [nombre, setNombre] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const { register, errorMessage } = useDbRegister(nombre, email, password);
 
-    useEffect(() => {
-        let listener;
-
-        const setupBackButton = async () => {
-            // Solo escuchamos el evento si el modal está abierto
-            if (ventanaRegister) {
-                listener = await App.addListener('backButton', () => {
-                    // Cerramos el modal cuando el usuario hace el gesto de atrás
-                    setVentanaRegister(false);
-                });
-            }
-        };
-
-        setupBackButton();
-
-        // Limpieza: Removemos el listener cuando el modal se cierra 
-        // o el componente se desmonta para evitar comportamientos extraños
-        return () => {
-            if (listener) {
-                listener.remove();
-            }
-        };
-    }, [ventanaRegister, setVentanaRegister]);
     return (
         <>
             <div className={ventanaRegister ? "w-full h-screen flex justify-center items-center font-sans bg-gray-100" : "hidden"}>
@@ -73,7 +51,7 @@ function Register({ ventanaRegister, setVentanaRegister }) {
                         value={nombre}
                         type="text"
                         className="mb-4 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Ejemplo: Juan Perez"
+                        placeholder="Nombre"
                         required
                     />
                     {/* Email */}
@@ -128,8 +106,9 @@ function Register({ ventanaRegister, setVentanaRegister }) {
                     {/* Botón */}
                     {password === password2 && password !== '' ? (
                         <button
-                            type="submit"
+                            type="button"
                             className="text-lg p-4 rounded-lg cursor-pointer mt-6 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold hover:opacity-90 transition"
+                            onClick={(e) => { const result = register(nombre, email, password); if (result) { setVentanaRegister(false); } e.preventDefault(); }}
                         >
                             Registrarse
                         </button>
