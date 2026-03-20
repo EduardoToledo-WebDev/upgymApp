@@ -1,7 +1,7 @@
 import { CircleUser, Settings } from "lucide-react";
 import { Preferences } from "@capacitor/preferences";
 
-const Header = ({ userData }) => {
+const Header = ({ userData, setMostrarConfiguracion }) => {
     return (
         <div className="w-full px-6 py-4 flex items-center justify-between box-border mt-2 border-b-2 border-gray-200">
             <button className="cursor-pointer bg-red-500 text-white p-2 rounded-lg" onClick={async () => { await Preferences.remove({ key: 'token' }); window.location.href = "/"; }}>Logout</button>
@@ -15,7 +15,7 @@ const Header = ({ userData }) => {
 
             <div className="flex items-center gap-3">
 
-                <div className="flex items-center justify-center w-[40px] h-[40px] bg-orange-50 text-orange-500 rounded-full">
+                <div className="flex items-center justify-center w-[40px] h-[40px] bg-orange-50 text-orange-500 rounded-full" onClick={() => setMostrarConfiguracion(true)}>
                     <Settings size={20} />
                 </div>
             </div>
