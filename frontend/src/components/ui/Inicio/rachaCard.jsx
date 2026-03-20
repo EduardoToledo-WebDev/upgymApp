@@ -3,7 +3,6 @@ import { Flame } from "lucide-react";
 const RachaCard = ({ racha, estado }) => {
     return (
         <div className="px-6 mt-4">
-
             <div className="bg-gradient-to-br from-[#0066FF] via-[#745F8B] to-[#EC5813] rounded-[30px] p-8 text-white shadow-lg shadow-orange-500/20 relative overflow-hidden">
 
 
