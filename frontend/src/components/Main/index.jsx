@@ -4,7 +4,6 @@ import AppRouter from '../../AppRouter';
 import { Preferences } from '@capacitor/preferences';
 import '../../globalStyles/global.css';
 
-
 function Main() {
     const API_URL = import.meta.env.VITE_API_URL;
     const [isAuthenticated, setIsAuthenticated] = useState(false);
