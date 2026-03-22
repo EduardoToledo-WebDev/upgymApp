@@ -1,12 +1,16 @@
 import { useState } from "react";
+// 1. IMPORTANTE: Debes importar Preferences de Capacitor
+import { Preferences } from '@capacitor/preferences';
 
-
-export function useDbRegister(nombre, email, password) {
+// 2. Quitamos los parámetros de la inicialización del hook, no los necesitas aquí
+export function useDbRegister() {
     const [errorMessage, setErrorMessage] = useState('');
     const API_URL = import.meta.env.VITE_API_URL;
 
     const register = async (nombre, email, password) => {
         try {
+            // Asegúrate de que en tu archivo .env, VITE_API_URL no incluya "http://" 
+            // para que no quede como http://http://localhost:3000
             const response = await fetch(`http://${API_URL}/register`, {
                 method: "POST",
                 headers: {
@@ -22,7 +26,7 @@ export function useDbRegister(nombre, email, password) {
             const result = await response.json();
 
             if (response.ok) {
-                // 1. Guardamos el token en el teléfono
+                // 3. Guardamos el token en el almacenamiento nativo
                 await Preferences.set({
                     key: 'token',
                     value: result.token,
@@ -35,12 +39,10 @@ export function useDbRegister(nombre, email, password) {
 
         } catch (error) {
             console.error(error);
-            setErrorMessage(`Error de conexión con el servidor ${error.message || error.toString()} ${API_URL}`);
+            setErrorMessage(`Error de conexión con el servidor`);
             return false;
         }
     };
 
     return { register, errorMessage };
-
 }
-

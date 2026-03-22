@@ -1,35 +1,53 @@
 const db = require('../models/db');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt'); // Importamos bcrypt
+require('dotenv').config();
 
-module.exports.register = (req, res) => {
+module.exports.register = async (req, res) => {
     const { nombre, email, password } = req.body;
-    const consulta = "INSERT INTO usuarios (nombre,email, contraseña) VALUES (?, ?, ?)";
+
+    // 1. Validar ANTES de hacer nada
+    if (!nombre || !email || !password) {
+        return res.status(400).json({ message: "Nombre, email y contraseña son requeridos" });
+    }
+
     try {
-        db.query(consulta, [nombre, email, password], (error, resultados) => {
+        // 2. Hashear la contraseña
+        const saltRounds = 10;
+        const passwordHasheada = await bcrypt.hash(password, saltRounds);
+
+        // 3. Guardar en la base de datos
+        const consulta = "INSERT INTO usuarios (nombre, email, contraseña) VALUES (?, ?, ?)";
+
+        db.query(consulta, [nombre, email, passwordHasheada], (error, resultados) => {
+            if (error.code === 'ER_DUP_ENTRY') {
+                return res.status(400).json({ message: "El email ya está registrado" });
+            }
             if (error) {
-                res.send(error);
+                console.error("Error al registrar:", error);
+                // Aquí podrías validar si el error es por email duplicado (ej. error.code === 'ER_DUP_ENTRY')
+                return res.status(500).json({ message: "Error al crear el usuario", error: error.code });
             }
-            if (!nombre || !email || !password) {
-                return res.status(400).json({ message: "Username y password son requeridos" });
-            }
-            if (resultados.length > 0) {
-                const token = jwt.sign({ nombre, email, password }, "Stack", {
-                    expiresIn: "24h"
-                })
-                res.cookie('access_token', token, {
-                    httpOnly: true,
-                    secure: process.env.NODE_ENV === 'production',
-                    sameSite: 'lax',
-                    maxAge: 24 * 60 * 60 * 1000
+
+
+            // En un INSERT exitoso, resultados.affectedRows es mayor a 0
+            if (resultados.affectedRows > 0) {
+                // 4. Auto-login: Generamos el token usando el email (igual que en el login)
+                const token = jwt.sign({ email }, process.env.JWT_SECRET, {
+                    expiresIn: "7d" // Unificado con el tiempo del login
                 });
-                res.send({ token });
+
+                // Devolvemos exactamente la misma estructura que el login
+                return res.status(201).json({
+                    message: "Usuario registrado y logueado exitosamente",
+                    token: token
+                });
             } else {
-                console.log("Usuario no encontrado");
-                res.send("Usuario no encontrado");
+                return res.status(400).json({ message: "No se pudo registrar el usuario" });
             }
-
-
         });
     } catch (e) {
+        console.error("Error inesperado en registro:", e);
+        return res.status(500).json({ message: "Error interno del servidor" });
     }
 };
