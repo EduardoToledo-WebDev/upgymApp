@@ -1,18 +1,19 @@
 import { useState } from "react"; // Necesario para la advertencia
 import { useNavigate } from "react-router-dom";
 import { ChevronRight, HelpCircle, Mail, Star, Users, Info, ArrowLeft, Bell, LogOut, AlertCircle } from "lucide-react";
+import { Preferences } from '@capacitor/preferences';
 
 const Configuracion = ({ mostrar, setMostrar }) => {
     const navigate = useNavigate();
     const [mostrarAlerta, setMostrarAlerta] = useState(false); // Estado para la advertencia
 
     // --- Función Final de Cierre ---
-    const confirmarCerrarSesion = () => {
-        localStorage.removeItem("token"); // O el método que uses
-        localStorage.removeItem("user");
+    const confirmarCerrarSesion = async () => {
+
+        await Preferences.remove({ key: 'token' });
+        window.location.href = "/";
         setMostrarAlerta(false);
-        setMostrar(false); // Cierra el panel de ajustes
-        navigate("/login"); // Te regresa al login
+        setMostrar(false);
     };
 
     const opcionesAyuda = [

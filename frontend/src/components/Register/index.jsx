@@ -1,18 +1,19 @@
 import React from "react";
 import { useState } from "react";
-import { useEffect } from "react";
 import logo from '../../assets/LogoUpgym.png';
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
-import { useDbRegister } from "./dbRegister";
+import { useDbRegister } from "./dbRegister.jsx";
 
-function Register({ ventanaRegister, setVentanaRegister }) {
+function Register({ ventanaRegister, setVentanaRegister, onLoginSuccess }) {
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
     const [email, setEmail] = useState('');
     const [nombre, setNombre] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const { register, errorMessage } = useDbRegister(nombre, email, password);
+
+    // CORRECCIÓN 1: Inicializamos el hook limpio, sin pasarle variables
+    const { register, errorMessage } = useDbRegister();
 
     return (
         <>
@@ -61,7 +62,7 @@ function Register({ ventanaRegister, setVentanaRegister }) {
                     <input
                         onChange={(e) => setEmail(e.target.value)}
                         value={email}
-                        type="text"
+                        type="email"
                         className="mb-1 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="ejemplo@correo.com"
                         required
@@ -108,7 +109,15 @@ function Register({ ventanaRegister, setVentanaRegister }) {
                         <button
                             type="button"
                             className="text-lg p-4 rounded-lg cursor-pointer mt-6 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold hover:opacity-90 transition"
-                            onClick={(e) => { const result = register(nombre, email, password); if (result) { setVentanaRegister(false); } e.preventDefault(); }}
+                            onClick={async (e) => {
+                                e.preventDefault();
+                                // CORRECCIÓN 2: async/await implementado correctamente
+                                const success = await register(nombre, email, password);
+                                if (success) {
+                                    setVentanaRegister(false);
+                                    onLoginSuccess();
+                                }
+                            }}
                         >
                             Registrarse
                         </button>
@@ -135,7 +144,6 @@ function Register({ ventanaRegister, setVentanaRegister }) {
                     </p>
                 </form>
             </div>
-
         </>
     )
 }

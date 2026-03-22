@@ -148,6 +148,7 @@ function Login({ onLoginSuccess }) {
             <Register
                 ventanaRegister={ventanaRegister}
                 setVentanaRegister={setVentanaRegister}
+                onLoginSuccess={onLoginSuccess}
             />
         </>
     );
