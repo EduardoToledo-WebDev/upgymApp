@@ -20,7 +20,7 @@ module.exports.register = async (req, res) => {
         const consulta = "INSERT INTO usuarios (nombre, email, contraseña) VALUES (?, ?, ?)";
 
         db.query(consulta, [nombre, email, passwordHasheada], (error, resultados) => {
-            if (error.code === 'ER_DUP_ENTRY') {
+            if (error?.code === 'ER_DUP_ENTRY') {
                 return res.status(400).json({ message: "El email ya está registrado" });
             }
             if (error) {

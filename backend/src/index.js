@@ -3,7 +3,7 @@ const app = express();
 const port = 3000;
 const routes = require('./api/endPoint');
 const cors = require('cors');
-const cookieParser = require('cookie-parser');
+
 
 app.use(cors({
     // 'origin: true' hace que el backend responda dinámicamente permitiendo 
@@ -13,7 +13,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+
 
 app.use('/', routes);
 
