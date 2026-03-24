@@ -1,9 +1,7 @@
 const db = require('../models/db');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt'); // Importamos bcrypt
 require('dotenv').config();
 
-module.exports.checkin = async (req, res) => {
+module.exports.gimnasioController = async (req, res) => {
     const { id } = req.params;
 
     if (!id) {
@@ -16,17 +14,17 @@ module.exports.checkin = async (req, res) => {
         db.query(consulta, [id], (error, results) => {
 
             if (error) {
-                console.error("Error al hacer checkin", error);
+                console.error("Error al obtener gimnasio", error);
                 return res.status(500).json({ message: "Error interno del servidor" });
             }
 
             const gimnasio = results[0][0];
 
-            return res.status(200).json({ message: "Checkin exitoso", gimnasio });
+            return res.status(200).json({ message: "Gimnasio obtenido exitosamente", gimnasio });
 
         });
     } catch (e) {
-        console.error("Error inesperado en registro:", e);
+        console.error("Error inesperado en obtener gimnasio:", e);
         return res.status(500).json({ message: "Error interno del servidor" });
     }
 };
