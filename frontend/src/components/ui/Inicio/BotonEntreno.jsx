@@ -2,9 +2,13 @@ import { FaPlay } from "react-icons/fa";
 import { FaDumbbell } from "react-icons/fa6";
 
 
-function BotonEntreno({ validacionUbicacion }) {
+function BotonEntreno({ validacionUbicacion, setMostrarCheckin }) {
     return (
+
         <>
+            <div className="flex items-center justify-center mt-10">
+                <p className="text-2xl font-bold">Empieza tu rutina!</p>
+            </div>
             <div className="w-full flex items-center justify-center mt-10 mb-10 hover:scale-102 transition-all duration-300 ">
                 <div className="w-[500px] h-[250px] bg-gradient-to-br from-[#0066FF] via-[#745F8B] to-[#EC5813] rounded-xl flex flex-row items-center justify-center cursor-pointer gap-20">
                     <div className="flex flex-col items-center text-white gap-2">
@@ -21,6 +25,18 @@ function BotonEntreno({ validacionUbicacion }) {
 
                 </div>
             </div>
+            <div className="flex items-center justify-center">
+                <button
+                    onClick={() => {
+                        setMostrarCheckin(false);
+                        setQrData(null);
+                        setGimnasio(null);
+                        setValidacionUbicacion(null);
+                        setSegundos(0);
+                    }}
+                    className="bg-blue-500 text-white p-2 w-40 h-10 rounded-xl cursor-pointer shadow-sm hover:scale-102 transition-all duration-300">Terminar rutina</button>
+            </div>
+
             {validacionUbicacion ? (
                 <p className="text-green-500 text-center text-md mt-2 relative bottom-0 left-0 right-0 ">Ubicacion correcta</p>
             ) : (

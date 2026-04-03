@@ -11,7 +11,17 @@ function Checkin() {
     const API_URL = import.meta.env.VITE_API_URL;
     const [ubicacion, setUbicacion] = useState(null);
     const [validacionUbicacion, setValidacionUbicacion] = useState(null);
+    const [segundos, setSegundos] = useState(0);
+    const [checkinValido, setCheckinValido] = useState(false);
     const RADIO_MAXIMO = 50; // metros
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setSegundos(prev => prev + 1);
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, []);
 
     const calcularDistancia = (lat1, lon1, lat2, lon2) => {
         const R = 6371e3; // metros
@@ -42,8 +52,18 @@ function Checkin() {
         }
     };
 
+    const validarCheckin = () => {
+        if (segundos < 2400) {
+            setCheckinValido(false);
+        };
+
+        if (validacionUbicacion === false) {
+            setCheckinValido(false);
+        }
+    }
+
     useEffect(() => {
-        if (!gimnasio) return; // ⛔ evita correr sin datos
+        if (!gimnasio) return;
 
         const obtenerUbicacion = async () => {
             try {
@@ -132,7 +152,7 @@ function Checkin() {
 
                     {gimnasio ? (
                         <>
-                            <BotonEntreno validacionUbicacion={validacionUbicacion}></BotonEntreno>
+                            <BotonEntreno validacionUbicacion={validacionUbicacion} setMostrarCheckin={setMostrarCheckin} setQrData={setQrData} setGimnasio={setGimnasio} setValidacionUbicacion={setValidacionUbicacion}></BotonEntreno>
                         </>
                     ) : (
                         <p className="text-center text-md mt-2">Error al escanear el QR</p>
