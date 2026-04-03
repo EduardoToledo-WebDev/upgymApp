@@ -3,16 +3,18 @@ import { Plus, FolderOpen, ArrowLeft, Dumbbell } from "lucide-react";
 import { useState, useEffect } from "react";
 import { NuevaRutina } from "./nuevaRutina/NuevaRutina";
 import { Preferences } from "@capacitor/preferences";
+import { RutinasDetalles } from "./RutinasDetalles";
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Entrenar() {
-    const [rutinaView, setRutinaView] = useState(false);
+    const [rutinaView, setRutinaView] = useState(false); // Para CREAR rutina
+    const [detalleView, setDetalleView] = useState(false); // 🔴 NUEVO ESTADO: Para VER detalles
     const { userData } = useOutletContext();
     const [rutinas, setRutinas] = useState([]);
+    const [rutinaSeleccionada, setRutinaSeleccionada] = useState(null);
 
     const styles = {
         title: "ml-5 font-bold text-3xl",
-        // Botones superiores mejorados visualmente
         topButtons: "mx-5 justify-center gap-2 flex mt-4 font-semibold text-gray-700 bg-white border border-gray-300 h-12 rounded-xl items-center shadow-sm active:bg-gray-50 transition-colors"
     }
 
@@ -20,7 +22,7 @@ export default function Entrenar() {
         const obtenerRutinas = async () => {
             try {
                 const token = await Preferences.get({ key: 'token' });
-                const response = await fetch(`http://${API_URL}/rutinas`, { // Asegúrate de que esta URL coincida con tu backend
+                const response = await fetch(`http://${API_URL}/rutinas`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token.value}`
@@ -35,12 +37,13 @@ export default function Entrenar() {
             }
         };
         obtenerRutinas();
-    }, [rutinaView]); // 🔴 TRUCO: Al pasar rutinaView aquí, la lista se recarga automáticamente cuando cierras el modal de crear rutina
+    }, [rutinaView, detalleView]);
 
     return (
         <div className="pantalla-contenido pb-20 bg-gray-50 min-h-screen pt-4">
             <h1 className={styles.title}>Rutinas</h1>
 
+            {/* Este botón abre NuevaRutina */}
             <button onClick={() => setRutinaView(true)} className={`${styles.topButtons} w-[calc(100%-40px)]`}>
                 <Plus size={20} className="text-blue-600" /> Crear rutina nueva
             </button>
@@ -56,20 +59,20 @@ export default function Entrenar() {
                 </span>
             </div>
 
-            {/* LISTA DE RUTINAS ESTILIZADA */}
             <div className="flex flex-col gap-4 px-5">
                 {rutinas.map((rutina) => (
-                    <div key={rutina.rutina_id} className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm active:bg-gray-50 transition-colors cursor-pointer">
+                    <div
+                        key={rutina.rutina_id}
+                        // 🔴 CORREGIDO: Cambiamos a detalleView y le pasamos 'rutina' directo sin el [0]
+                        onClick={() => { setRutinaSeleccionada(rutina); setDetalleView(true); }}
+                        className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm active:bg-gray-50 transition-colors cursor-pointer"
+                    >
 
-                        {/* Cabecera de la Tarjeta */}
                         <div className="flex justify-between items-start mb-3 gap-2">
-                            {/* truncate hace que el texto largo se vuelva "Día de piern..." */}
                             <h3 className="font-bold text-lg text-gray-900 truncate">{rutina.nombre}</h3>
                         </div>
 
-                        {/* Previsualización de Ejercicios */}
                         <div className="flex flex-col gap-1.5">
-                            {/* Solo mostramos los primeros 3 para no saturar la UI */}
                             {rutina.ejercicios.slice(0, 3).map((ejercicio) => (
                                 <div key={ejercicio.exerciseId} className="flex items-center gap-2 overflow-hidden">
                                     <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></div>
@@ -80,7 +83,6 @@ export default function Entrenar() {
                                 </div>
                             ))}
 
-                            {/* Indicador de ejercicios ocultos */}
                             {rutina.ejercicios.length > 3 && (
                                 <p className="text-xs text-gray-400 mt-1 font-medium ml-3.5">
                                     + {rutina.ejercicios.length - 3} ejercicios más
@@ -99,6 +101,9 @@ export default function Entrenar() {
             </div>
 
             <NuevaRutina rutinaView={rutinaView} setRutinaView={setRutinaView} />
+
+            {/* 🔴 CORREGIDO: Le pasamos los props nuevos de detalleView */}
+            <RutinasDetalles detalleView={detalleView} setDetalleView={setDetalleView} rutina={rutinaSeleccionada} />
         </div>
     );
 }

@@ -19,7 +19,7 @@ const deducirObjetivoAutomatico = (ejercicio) => {
     return { tipo: "Reps", valor: "10-12" };
 };
 
-const NuevaRutinaSets = ({ paso, nombreRutina, ejercicios, volverAtras, cerrarVentana }) => {
+const NuevaRutinaSets = ({ paso, nombreRutina, ejercicios, volverAtras, cerrarVentana, esEdicion = false, idRutina = null }) => {
     const [configuracion, setConfiguracion] = useState([]);
 
     useEffect(() => {
@@ -125,12 +125,23 @@ const NuevaRutinaSets = ({ paso, nombreRutina, ejercicios, volverAtras, cerrarVe
         if (!formularioValido) return;
 
         const token = await Preferences.get({ key: 'token' });
+
+        // Armamos el objeto. Si estamos editando, mandamos el id_rutina.
         const rutinaFinalizada = {
+            id_rutina: idRutina,
             nombre: nombreRutina,
             ejercicios: configuracion
         };
-        fetch(`http://${API_URL}/nueva-rutina`, {
-            method: 'POST',
+
+        // 🔴 MAGIA: Decidimos a qué URL y con qué Método vamos a golpear
+        const urlPeticion = esEdicion
+            ? `http://${API_URL}/rutinas/${idRutina}`  // Modo Editar (PUT)
+            : `http://${API_URL}/rutinas`;             // Modo Crear (POST)
+
+        const metodoHTTP = esEdicion ? 'PUT' : 'POST';
+
+        fetch(urlPeticion, {
+            method: metodoHTTP,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token.value}`
@@ -141,12 +152,10 @@ const NuevaRutinaSets = ({ paso, nombreRutina, ejercicios, volverAtras, cerrarVe
             .then(data => {
                 console.log(data);
                 cerrarVentana();
+                if (!esEdicion) limpiarFormulario(); // Si existe
             })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+            .catch(error => console.error('Error:', error));
     };
-
     return (
         <div className={`fixed inset-0 z-50 bg-gray-50 flex flex-col transform transition-transform duration-300 ease-in-out ${paso === 2 ? "translate-x-0" : "translate-x-full"}`}>
 

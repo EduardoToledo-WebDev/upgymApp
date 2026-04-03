@@ -10,7 +10,7 @@ const Header = ({ userData, setMostrarConfiguracion }) => {
                 <div className="w-[50px] h-[50px] bg-gray-200 rounded-full border-2 border-sky-600 flex justify-center items-center overflow-hidden shadow-sm">
                     <CircleUser size={35} className="text-gray-500" />
                 </div>
-                <p className="font-bold text-lg text-gray-800">{userData?.nombre || "pausipop5"}</p>
+                <p className="font-bold text-lg text-gray-800">{userData?.nombre || "Usuario"}</p>
             </div>
 
             <div className="flex items-center gap-3">

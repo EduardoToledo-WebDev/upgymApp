@@ -17,7 +17,7 @@ module.exports.register = async (req, res) => {
         const passwordHasheada = await bcrypt.hash(password, saltRounds);
 
         // 3. Guardar en la base de datos
-        const consulta = "INSERT INTO usuarios (nombre, email, contraseña) VALUES (?, ?, ?)";
+        const consulta = "call RegistrarUsuario(?, ?, ?)";
 
         db.query(consulta, [nombre, email, passwordHasheada], (error, resultados) => {
             if (error?.code === 'ER_DUP_ENTRY') {
