@@ -6,30 +6,20 @@ module.exports.verifySession = (req, res) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
-    // Evitamos que intente validar la palabra "undefined"
+    // 1. Validar que el token no sea basura
     if (!token || token === 'undefined' || token === 'null') {
         return res.status(401).json({ valid: false, message: "No hay sesión activa" });
     }
 
+    // 2. Verificar el JWT
     jwt.verify(token, process.env.JWT_SECRET, (error, decodificado) => {
         if (error) {
             return res.status(401).json({ valid: false, message: "Sesión caducada o inválida" });
         }
 
+        // Extraemos el email del payload del token
         const emailUsuario = decodificado.email;
-
-        const consulta = `SELECT 
-            u.id_usuario,
-            u.nombre,
-            u.email,
-            IFNULL(dr.racha_act, 0) AS racha_act,
-            CASE 
-                WHEN dr.activo = 1 THEN 'Activa'
-                ELSE 'Inactiva'
-            END AS estado_racha
-        FROM usuarios u
-        LEFT JOIN dias_racha dr ON u.id_usuario = dr.id_usuario
-        WHERE u.email = ?;`;
+        const consulta = "CALL ObtenerUsuario(?)";
 
         db.query(consulta, [emailUsuario], (err, resultados) => {
             if (err) {
@@ -37,16 +27,22 @@ module.exports.verifySession = (req, res) => {
                 return res.status(500).json({ valid: false, message: "Error interno del servidor" });
             }
 
-            if (resultados.length > 0) {
+            /* RECORDATORIO: 
+               resultados[0] = Arreglo de filas (los datos del usuario)
+               resultados[0][0] = El objeto del usuario específico
+            */
+            const filas = resultados[0];
 
-                // Ya no generamos token aquí. Devolvemos la info del usuario.
-                console.log(resultados[0]);
+            if (filas && filas.length > 0) {
+                const usuario = filas[0];
+
+                // Devolvemos el OBJETO del usuario, no el arreglo
                 return res.status(200).json({
                     valid: true,
-                    user: resultados[0] // Main.jsx necesita esto para setUserData()
+                    user: usuario
                 });
             } else {
-                return res.status(404).json({ valid: false, message: "Usuario no encontrado" });
+                return res.status(404).json({ valid: false, message: "Usuario no encontrado en la base de datos" });
             }
         });
     });
