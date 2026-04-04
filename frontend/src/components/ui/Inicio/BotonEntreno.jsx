@@ -1,8 +1,14 @@
 import { FaPlay } from "react-icons/fa";
 import { FaDumbbell } from "react-icons/fa6";
+import { useContext } from "react";
+import { AppContext } from "../../../context/AppContext";
 
-
-function BotonEntreno({ validacionUbicacion, setMostrarCheckin }) {
+function BotonEntreno() {
+    const { mostrarCheckin, setMostrarCheckin } = useContext(AppContext);
+    const { validacionUbicacion, setValidacionUbicacion } = useContext(AppContext);
+    const { qrData, setQrData } = useContext(AppContext);
+    const { gimnasio, setGimnasio } = useContext(AppContext);
+    const { segundos, setSegundos } = useContext(AppContext);
     return (
 
         <>

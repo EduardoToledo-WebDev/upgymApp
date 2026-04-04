@@ -1,7 +1,9 @@
 import { CircleUser, Settings } from "lucide-react";
-import { Preferences } from "@capacitor/preferences";
+import { useContext } from "react";
+import { AppContext } from "../../../context/AppContext";
 
-const Header = ({ userData, setMostrarConfiguracion }) => {
+const Header = () => {
+    const { userData, setMostrarConfiguracion } = useContext(AppContext);
     return (
         <div className="w-full px-6 py-4 flex items-center justify-between box-border mt-2 border-b-2 border-gray-200">
 

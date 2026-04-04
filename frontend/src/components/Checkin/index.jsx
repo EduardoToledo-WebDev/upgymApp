@@ -4,24 +4,59 @@ import { BotonEntreno } from "../ui/Inicio/BotonEntreno";
 import { BarcodeScanner } from "@capacitor-mlkit/barcode-scanning";
 import { Geolocation } from '@capacitor/geolocation';
 import { useEffect } from "react";
+import { useContext } from "react";
+import { AppContext } from "../../context/AppContext";
 function Checkin() {
-    const [mostrarCheckin, setMostrarCheckin] = useState(true);
-    const [gimnasio, setGimnasio] = useState();
-    const [qrData, setQrData] = useState("");
+    const { userData, setUserData } = useContext(AppContext);
+    const { rachaUsuario, setRachaUsuario } = useContext(AppContext);
+    const { mostrarCheckin, setMostrarCheckin } = useContext(AppContext);
+    const { validacionUbicacion, setValidacionUbicacion } = useContext(AppContext);
+    const { qrData, setQrData } = useContext(AppContext);
+    const { gimnasio, setGimnasio } = useContext(AppContext);
+    const { segundos, setSegundos } = useContext(AppContext);
+    const { checkinValido, setCheckinValido } = useContext(AppContext);
     const API_URL = import.meta.env.VITE_API_URL;
-    const [ubicacion, setUbicacion] = useState(null);
-    const [validacionUbicacion, setValidacionUbicacion] = useState(null);
-    const [segundos, setSegundos] = useState(0);
-    const [checkinValido, setCheckinValido] = useState(false);
     const RADIO_MAXIMO = 50; // metros
 
     useEffect(() => {
         const interval = setInterval(() => {
             setSegundos(prev => prev + 1);
+            //validar que el tiempo sea mayor a 40 minutos y que no se hayas salido del rango de ubicacion
+            if (segundos > 2400 && validacionUbicacion === true) {
+                setCheckinValido(true);
+                insertarCheckin();
+            } else {
+                setCheckinValido(false);
+            }
         }, 1000);
+
 
         return () => clearInterval(interval);
     }, []);
+
+    const insertarCheckin = async () => {
+        const { value: tokenGuardado } = await Preferences.get({ key: 'token' });
+
+        const response = await fetch(`http://${API_URL}/checkin`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${tokenGuardado}`
+            },
+            body: JSON.stringify({
+                id_usuario: userData.id_usuario,
+                ult_activo: new Date().toLocaleDateString("es-MX"),
+                racha_act: rachaUsuario.racha_act + 1,
+                activo: 1,
+            }),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data);
+        }
+
+    };
 
     const calcularDistancia = (lat1, lon1, lat2, lon2) => {
         const R = 6371e3; // metros
@@ -51,17 +86,6 @@ function Checkin() {
             setGimnasio(data.gimnasio);
         }
     };
-
-    const validarCheckin = () => {
-        if (segundos < 2400) {
-            setCheckinValido(false);
-        };
-
-        if (validacionUbicacion === false) {
-            setCheckinValido(false);
-        }
-    }
-
     useEffect(() => {
         if (!gimnasio) return;
 

@@ -8,6 +8,8 @@ const authController = require('../controllers/authController');
 const clasificacionController = require('../controllers/clasificacionController');
 const userRutineController = require('../controllers/userRutineController');
 const getUserRutineController = require('../controllers/getUserRutineController');
+const checkinController = require('../controllers/checkinController');
+const diasRachaController = require('../controllers/diasRachaController');
 
 
 router.post('/login', login);
@@ -16,8 +18,8 @@ router.post('/logout', logout);
 router.get('/verify-session', authController.verifySession);
 router.get('/clasificacion', clasificacionController.verifySession);
 router.get("/gimnasio/:id", gimnasioController);
-router.get('/clasificacion', clasificacionController.verifySession)
 router.post('/nueva-rutina', userRutineController.crearRutina);
 router.get('/rutinas', getUserRutineController.obtenerRutinas);
-
+router.post('/checkin', checkinController.crearCheckin);
+router.get('/dias-racha/:id', diasRachaController.obtenerDiasRachaUsuario);
 module.exports = router;
