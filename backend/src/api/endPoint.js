@@ -7,6 +7,7 @@ const { register } = require('../controllers/registerController');
 const authController = require('../controllers/authController');
 const clasificacionController = require('../controllers/clasificacionController');
 const rutinasController = require('../controllers/rutinasController');
+const exerciseController = require('../controllers/exerciseController');
 
 router.post('/login', login);
 router.post('/register', register);
@@ -16,5 +17,10 @@ router.get('/rutinas', rutinasController.obtenerRutinas);
 router.post('/rutinas', rutinasController.crearRutina);
 router.put('/rutinas/:id', rutinasController.editarRutina);
 router.delete('/rutinas/:id', rutinasController.eliminarRutina);
+router.get('/exercises', exerciseController.getEjercicios);
+router.get('/body-parts', exerciseController.getBodyParts);
+router.get('/equipments', exerciseController.getEquipments);
+router.get('/muscles', exerciseController.getMuscles);
+router.put('/carpetas/asignar', rutinasController.asignarCarpeta);
 
 module.exports = router;

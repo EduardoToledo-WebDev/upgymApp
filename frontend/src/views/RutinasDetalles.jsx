@@ -3,7 +3,8 @@ import { useState } from "react";
 import { Preferences } from "@capacitor/preferences";
 const API_URL = import.meta.env.VITE_API_URL;
 
-const RutinasDetalles = ({ detalleView, setDetalleView, rutina, actualizarLista }) => {
+// 🔴 1. Agregamos "abrirEdicion" a los props
+const RutinasDetalles = ({ detalleView, setDetalleView, rutina, actualizarLista, abrirEdicion }) => {
     const [menuAbierto, setMenuAbierto] = useState(false);
     const [confirmarEliminar, setConfirmarEliminar] = useState(false);
 
@@ -21,6 +22,8 @@ const RutinasDetalles = ({ detalleView, setDetalleView, rutina, actualizarLista 
                 setDetalleView(false);
                 setMenuAbierto(false);
                 if (actualizarLista) actualizarLista();
+            } else {
+                console.error("Error del servidor:", data.message);
             }
         } catch (error) {
             console.error("Error al eliminar la rutina:", error);
@@ -55,7 +58,8 @@ const RutinasDetalles = ({ detalleView, setDetalleView, rutina, actualizarLista 
                             <div className="absolute top-12 right-0 mt-1 w-40 bg-white border border-gray-200 rounded-xl shadow-lg z-50 py-2 overflow-hidden">
                                 <button
                                     onClick={() => {
-                                        console.log("Pronto abriremos edición...");
+                                        // 🔴 2. Activamos la función para ir a Editar
+                                        if (abrirEdicion) abrirEdicion();
                                         setMenuAbierto(false);
                                     }}
                                     className="w-full text-left px-4 py-2 flex items-center gap-2 hover:bg-gray-50 text-gray-700 font-medium transition-colors"
@@ -76,7 +80,7 @@ const RutinasDetalles = ({ detalleView, setDetalleView, rutina, actualizarLista 
                     </div>
                 </div>
 
-                {/* 2. CONTENIDO (Lista de Ejercicios Restaurada) */}
+                {/* 2. CONTENIDO */}
                 <div className="flex-1 overflow-y-auto px-4 py-6" onClick={() => setMenuAbierto(false)}>
                     <div className="mb-4 flex items-center justify-between">
                         <h2 className="font-bold text-gray-700 text-sm uppercase tracking-wider">
@@ -98,7 +102,8 @@ const RutinasDetalles = ({ detalleView, setDetalleView, rutina, actualizarLista 
 
                                     {ejercicio.gifUrl ? (
                                         <img
-                                            src={ejercicio.gifUrl}
+                                            // 🔴 3. Construimos la URL apuntando al backend
+                                            src={ejercicio.gifUrl.startsWith('http') ? ejercicio.gifUrl : `http://${API_URL}/gifs/${ejercicio.gifUrl}`}
                                             alt={ejercicio.name}
                                             className="w-14 h-14 rounded-lg object-cover bg-gray-100"
                                             loading="lazy"
@@ -145,7 +150,7 @@ const RutinasDetalles = ({ detalleView, setDetalleView, rutina, actualizarLista 
                 </div>
             </div>
 
-            {/* 🔴 MODAL DE CONFIRMACIÓN DE ELIMINACIÓN CON Z-INDEX SEGURO */}
+            {/* MODAL DE CONFIRMACIÓN DE ELIMINACIÓN */}
             {confirmarEliminar && (
                 <div className="fixed inset-0 flex items-center justify-center p-6 bg-black/50 backdrop-blur-sm" style={{ zIndex: 100 }}>
                     <div className="bg-white w-full max-w-xs rounded-2xl p-6 shadow-2xl">
