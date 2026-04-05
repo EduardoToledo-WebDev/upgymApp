@@ -53,6 +53,7 @@ module.exports.obtenerRutinas = (req, res) => {
                         rutinaExistente = {
                             rutina_id: fila.rutina_id,
                             nombre: fila.rutina_nombre,
+                            grupo_rutina: fila.grupo_rutina,
                             fecha_creacion: fila.fecha_creacion,
                             ejercicios: []
                         };
@@ -212,6 +213,60 @@ module.exports.editarRutina = (req, res) => {
                     });
                 });
             });
+        });
+    });
+};
+module.exports.asignarCarpeta = (req, res) => {
+    // 1. Verificamos el Token (Igual que en tus otras funciones)
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) return res.status(401).json({ valid: false, message: "No hay sesión activa" });
+
+    jwt.verify(token, process.env.JWT_SECRET, (error, decodificado) => {
+        if (error) return res.status(401).json({ valid: false, message: "Sesión caducada" });
+
+        const emailUsuario = decodificado.email;
+        const { nombreCarpeta, nombreCarpetaAnterior, rutinasIds } = req.body;
+
+        // 2. Obtenemos el ID del usuario
+        db.query('CALL ObtenerIdUsuarioPorEmail(?)', [emailUsuario], (err, resultados) => {
+            if (err || !resultados[0] || resultados[0].length === 0) {
+                return res.status(500).json({ valid: false, message: "Error verificando usuario" });
+            }
+
+            const idUsuario = resultados[0][0].id_usuario;
+
+            // 3. Función auxiliar para asignar las nuevas carpetas
+            const asignarNuevas = () => {
+                if (rutinasIds && rutinasIds.length > 0) {
+                    const idsString = rutinasIds.join(',');
+                    // OJO: Usamos 'id' y 'usuario_id' como en tu función editarRutina
+                    const queryUpdate = `UPDATE rutinas SET grupo_rutina = ? WHERE id IN (${idsString}) AND usuario_id = ?`;
+
+                    db.query(queryUpdate, [nombreCarpeta, idUsuario], (err) => {
+                        if (err) return res.status(500).json({ valid: false, message: "Error asignando la carpeta" });
+                        return res.json({ valid: true, message: "Carpetas actualizadas" });
+                    });
+                } else {
+                    return res.json({ valid: true, message: "Carpetas limpiadas" });
+                }
+            };
+
+            // 4. Lógica Principal: Si había una carpeta anterior, la borramos primero
+            if (nombreCarpetaAnterior) {
+                db.query(
+                    "UPDATE rutinas SET grupo_rutina = NULL WHERE grupo_rutina = ? AND usuario_id = ?",
+                    [nombreCarpetaAnterior, idUsuario],
+                    (err) => {
+                        if (err) return res.status(500).json({ valid: false, message: "Error limpiando carpeta anterior" });
+                        asignarNuevas(); // Pasamos al siguiente paso
+                    }
+                );
+            } else {
+                // Si es una carpeta 100% nueva, pasamos directo a asignar
+                asignarNuevas();
+            }
         });
     });
 };
