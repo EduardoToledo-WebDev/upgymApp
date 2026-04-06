@@ -203,6 +203,7 @@ const NuevaRutina = ({ setRutinaView, rutinaView, rutinaAEditar, setRutinaAEdita
                 <NuevaRutinaSets
                     paso={paso}
                     nombreRutina={nombreRutina}
+                    grupoRutina={rutinaAEditar?.grupo_rutina || null}
                     ejercicios={ejercicioAgregado}
                     volverAtras={() => setPaso(1)}
                     cerrarVentana={() => {

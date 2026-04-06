@@ -22,20 +22,27 @@ const deducirObjetivoAutomatico = (ejercicio) => {
     return { tipo: "Reps", valor: "10-12" };
 };
 
-const NuevaRutinaSets = ({ paso, nombreRutina, ejercicios, volverAtras, cerrarVentana, esEdicion = false, idRutina = null }) => {
+// 🔴 2. Agregamos grupoRutina a las propiedades para que la IA pueda usar carpetas
+const NuevaRutinaSets = ({ paso, nombreRutina, grupoRutina, ejercicios, volverAtras, cerrarVentana, esEdicion = false, idRutina = null }) => {
     const [configuracion, setConfiguracion] = useState([]);
 
     useEffect(() => {
         const configsIniciales = ejercicios.map(ej => {
+            // Si el ejercicio ya trae configuración (porque viene de la BD o IA), la respetamos.
+            // Si no, le calculamos una automática.
+            if (ej.tipoObjetivo && ej.valorObjetivo && ej.series && ej.descanso) {
+                return ej;
+            }
+
             const objetivoInteligente = deducirObjetivoAutomatico(ej);
             return {
                 exerciseId: ej.exerciseId,
                 name: ej.name,
                 gifUrl: ej.gifUrl,
-                series: 4,
-                tipoObjetivo: objetivoInteligente.tipo,
-                valorObjetivo: objetivoInteligente.valor,
-                descanso: 90
+                series: ej.series || 4,
+                tipoObjetivo: ej.tipoObjetivo || objetivoInteligente.tipo,
+                valorObjetivo: ej.valorObjetivo || objetivoInteligente.valor,
+                descanso: ej.descanso || 90
             };
         });
         setConfiguracion(configsIniciales);
@@ -114,14 +121,18 @@ const NuevaRutinaSets = ({ paso, nombreRutina, ejercicios, volverAtras, cerrarVe
         const rutinaFinalizada = {
             id_rutina: idRutina,
             nombre: nombreRutina,
+            grupo_rutina: grupoRutina || null, // 🔴 3. Incluimos la carpeta para el Backend
             ejercicios: configuracion
         };
 
-        const urlPeticion = esEdicion
+        // 🔴 4. EL FIX MAESTRO: Diferenciar edición real (con ID) de IA (sin ID)
+        const esActualizacionReal = idRutina !== null && idRutina !== undefined;
+
+        const urlPeticion = esActualizacionReal
             ? `http://${API_URL}/rutinas/${idRutina}`
             : `http://${API_URL}/rutinas`;
 
-        const metodoHTTP = esEdicion ? 'PUT' : 'POST';
+        const metodoHTTP = esActualizacionReal ? 'PUT' : 'POST';
 
         fetch(urlPeticion, {
             method: metodoHTTP,
@@ -134,7 +145,6 @@ const NuevaRutinaSets = ({ paso, nombreRutina, ejercicios, volverAtras, cerrarVe
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                // 🔴 3. ADIÓS BUG: cerrarVentana() ya hace todo el reseteo en el componente Padre
                 cerrarVentana();
             })
             .catch(error => console.error('Error:', error));
@@ -158,8 +168,7 @@ const NuevaRutinaSets = ({ paso, nombreRutina, ejercicios, volverAtras, cerrarVe
                         disabled={!formularioValido}
                         className={`font-semibold transition-colors ${formularioValido ? 'text-blue-600 hover:text-blue-800' : 'text-gray-400 cursor-not-allowed'}`}
                     >
-                        {/* 🔴 Detalle visual extra: Botón dinámico */}
-                        {esEdicion ? 'Actualizar' : 'Guardar'}
+                        {(idRutina !== null && idRutina !== undefined) ? 'Actualizar' : 'Guardar'}
                     </button>
                 </div>
             </div>
@@ -170,7 +179,6 @@ const NuevaRutinaSets = ({ paso, nombreRutina, ejercicios, volverAtras, cerrarVe
                         <div key={item.exerciseId} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
 
                             <div className="flex items-center gap-3 mb-4 border-b border-gray-50 pb-3">
-                                {/* 🔴 2. URL DE GIFS CORREGIDA */}
                                 <img
                                     src={item.gifUrl ? `http://${API_URL}/gifs/${item.gifUrl}` : ''}
                                     alt={item.name}
