@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage() });
 
 
 const { login } = require('../controllers/loginController');
@@ -22,5 +24,6 @@ router.get('/body-parts', exerciseController.getBodyParts);
 router.get('/equipments', exerciseController.getEquipments);
 router.get('/muscles', exerciseController.getMuscles);
 router.put('/carpetas/asignar', rutinasController.asignarCarpeta);
+router.post('/rutinas/importar', upload.single('documento'), rutinasController.importarRutinaIA);
 
 module.exports = router;

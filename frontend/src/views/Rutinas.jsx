@@ -1,9 +1,12 @@
 import { useOutletContext } from "react-router-dom";
-import { Plus, FolderOpen, FolderPlus, ArrowLeft, Dumbbell, Folder, ChevronDown, ChevronRight, Pencil } from "lucide-react";
-import { useState, useEffect, useMemo } from "react";
+import { Plus, FolderOpen, FolderPlus, ArrowLeft, Dumbbell, Folder, ChevronDown, ChevronRight, Pencil, Loader2 } from "lucide-react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { NuevaRutina } from "./nuevaRutina/NuevaRutina";
 import { Preferences } from "@capacitor/preferences";
 import { RutinasDetalles } from "./RutinasDetalles";
+import { toast, Toaster } from 'sonner';
+import { feedback } from '../utils/haptics';
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Entrenar() {
@@ -15,14 +18,19 @@ export default function Entrenar() {
     const [rutinaAEditar, setRutinaAEditar] = useState(null);
     const [refrescarLista, setRefrescarLista] = useState(false);
 
+    // --- ESTADOS PARA IMPORTACIÓN CON IA ---
+    const fileInputRef = useRef(null);
+    const [importando, setImportando] = useState(false);
+    const [abortController, setAbortController] = useState(null);
+
     // ESTADOS PARA CARPETAS Y EL MODAL
     const [carpetasAbiertas, setCarpetasAbiertas] = useState({});
     const [modalCarpeta, setModalCarpeta] = useState(false);
 
     // Estados internos del modal de carpetas
-    const [carpetaAEditar, setCarpetaAEditar] = useState(null); // null = Crear, "Nombre" = Editar
+    const [carpetaAEditar, setCarpetaAEditar] = useState(null);
     const [nombreNuevaCarpeta, setNombreNuevaCarpeta] = useState("");
-    const [rutinasSeleccionadas, setRutinasSeleccionadas] = useState([]); // Array de IDs
+    const [rutinasSeleccionadas, setRutinasSeleccionadas] = useState([]);
 
     const styles = {
         title: "font-bold text-3xl text-gray-900",
@@ -45,7 +53,7 @@ export default function Entrenar() {
         obtenerRutinas();
     }, [rutinaView, detalleView, refrescarLista]);
 
-    // AGRUPACIÓN INTELIGENTE (Solo agrupa las que tienen grupo_rutina)
+    // AGRUPACIÓN INTELIGENTE
     const { carpetas, rutinasSueltas } = useMemo(() => {
         const mapaCarpetas = {};
         const sueltas = [];
@@ -67,7 +75,100 @@ export default function Entrenar() {
         setCarpetasAbiertas(prev => ({ ...prev, [nombre]: !prev[nombre] }));
     };
 
-    // --- LÓGICA DEL MODAL MULTIUSOS ---
+    // --- LÓGICA DE IMPORTACIÓN (IA) ---
+    const handleSubirArchivo = async (event) => {
+        const archivo = event.target.files[0];
+        if (!archivo) return;
+
+        setImportando(true);
+        const controller = new AbortController();
+        setAbortController(controller);
+
+        const formData = new FormData();
+        formData.append('documento', archivo);
+
+        try {
+            const token = await Preferences.get({ key: 'token' });
+
+            // 1. Mandamos el archivo a la IA
+            const response = await fetch(`http://${API_URL}/rutinas/importar`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token.value}` },
+                body: formData,
+                signal: controller.signal
+            });
+
+            const data = await response.json();
+
+            if (data.valid) {
+                // Validación: Si la IA devolvió 0 rutinas (Documento Basura)
+                if (data.cantidad === 0) {
+                    feedback.error();
+                    toast.error("Documento no válido", {
+                        description: "No encontramos ejercicios que coincidan con el catálogo."
+                    });
+                    return; // Salimos sin hacer nada más
+                }
+
+                const { rutinasIA, carpeta } = data;
+
+                // 2. Guardamos TODAS las rutinas en lote automáticamente
+                const promesasDeGuardado = rutinasIA.map(rutina => {
+                    return fetch(`http://${API_URL}/rutinas`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token.value}`
+                        },
+                        body: JSON.stringify({
+                            nombre: rutina.nombre,
+                            grupo_rutina: rutina.grupo_rutina,
+                            ejercicios: rutina.ejercicios
+                        })
+                    });
+                });
+
+                // Esperamos a que todas se guarden en la base de datos
+                await Promise.all(promesasDeGuardado);
+
+                // 3. Mostramos el resultado en la pantalla
+                setCarpetasAbiertas(prev => ({ ...prev, [carpeta]: true })); // Abrimos la carpeta automáticamente
+                setRefrescarLista(prev => !prev); // Recargamos las rutinas de la BD
+
+                // Opcional: Un alert amigable para confirmar
+                feedback.success();
+                toast.success("¡Éxito!", {
+                    description: `Se generaron ${data.cantidad} rutinas en la carpeta "${carpeta}".`
+                });
+            } else {
+                feedback.error();
+                toast.error("Error", {
+                    description: data.message
+                });
+            }
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                console.log("Importación cancelada por el usuario");
+            } else {
+                console.error("Error importando:", error);
+                feedback.error();
+                toast.error("Error de conexión", {
+                    description: "No se pudo conectar con el servidor."
+                });
+            }
+        } finally {
+            setImportando(false);
+            setAbortController(null);
+            if (fileInputRef.current) fileInputRef.current.value = "";
+        }
+    };
+
+    const cancelarImportacion = () => {
+        if (abortController) abortController.abort();
+        setImportando(false);
+    };
+
+    // --- LÓGICA DEL MODAL DE CARPETAS ---
     const abrirModalCrear = () => {
         setCarpetaAEditar(null);
         setNombreNuevaCarpeta("");
@@ -76,11 +177,10 @@ export default function Entrenar() {
     };
 
     const abrirModalEditar = (nombreCarpeta, e) => {
-        e.stopPropagation(); // Evita que la carpeta se abra/cierre al picar el botón de editar
+        e.stopPropagation();
         setCarpetaAEditar(nombreCarpeta);
         setNombreNuevaCarpeta(nombreCarpeta);
 
-        // Pre-seleccionamos las rutinas que ya pertenecen a esta carpeta
         const idsDeEstaCarpeta = carpetas[nombreCarpeta].map(r => r.rutina_id);
         setRutinasSeleccionadas(idsDeEstaCarpeta);
 
@@ -99,7 +199,6 @@ export default function Entrenar() {
 
         try {
             const token = await Preferences.get({ key: 'token' });
-            // 🔴 Enviamos al backend el nombre de la carpeta y los IDs de las rutinas que van adentro
             const response = await fetch(`http://${API_URL}/carpetas/asignar`, {
                 method: 'PUT',
                 headers: {
@@ -108,14 +207,14 @@ export default function Entrenar() {
                 },
                 body: JSON.stringify({
                     nombreCarpeta: nombreNuevaCarpeta.trim(),
-                    nombreCarpetaAnterior: carpetaAEditar, // Para saber si le cambiamos el nombre
+                    nombreCarpetaAnterior: carpetaAEditar,
                     rutinasIds: rutinasSeleccionadas
                 })
             });
 
             if (response.ok) {
                 setModalCarpeta(false);
-                setCarpetasAbiertas(prev => ({ ...prev, [nombreNuevaCarpeta.trim()]: true })); // Abre la carpeta nueva
+                setCarpetasAbiertas(prev => ({ ...prev, [nombreNuevaCarpeta.trim()]: true }));
                 setRefrescarLista(prev => !prev);
             }
         } catch (error) {
@@ -133,8 +232,8 @@ export default function Entrenar() {
                 <h3 className="font-bold text-lg text-gray-900 truncate">{rutina.nombre}</h3>
             </div>
             <div className="flex flex-col gap-1.5">
-                {rutina.ejercicios?.slice(0, 3).map((ejercicio) => (
-                    <div key={ejercicio.exerciseId || Math.random()} className="flex items-center gap-2 overflow-hidden">
+                {rutina.ejercicios?.slice(0, 3).map((ejercicio, index) => (
+                    <div key={`${ejercicio.exerciseId}-${index}`} className="flex items-center gap-2 overflow-hidden">
                         <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></div>
                         <p className="text-sm text-gray-500 truncate capitalize flex-1">
                             <span className="font-medium text-gray-700 mr-1">{ejercicio.series}x</span>
@@ -153,7 +252,7 @@ export default function Entrenar() {
 
     return (
         <div className="bg-gray-50 min-h-screen pb-24">
-
+            <Toaster position="bottom-center" expand={false} richColors closeButton />
             {/* HEADER FIJO */}
             <div className="sticky top-0 bg-gray-50 z-30 pt-4 pb-4 px-5 shadow-[0_4px_6px_-4px_rgba(0,0,0,0.05)]">
                 <h1 className={styles.title}>Rutinas</h1>
@@ -164,9 +263,18 @@ export default function Entrenar() {
                     </button>
 
                     <div className="grid grid-cols-2 gap-3">
-                        <button className={styles.topButtons}>
+                        {/* 🔴 2. INPUT OCULTO Y BOTÓN DE IMPORTAR CONECTADO */}
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={handleSubirArchivo}
+                            accept=".pdf, text/plain, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                            className="hidden"
+                        />
+                        <button onClick={() => fileInputRef.current.click()} className={styles.topButtons}>
                             <FolderOpen size={20} className="text-gray-500" /> Importar
                         </button>
+
                         <button onClick={abrirModalCrear} className={styles.topButtons}>
                             <FolderPlus size={20} className="text-gray-500" /> Carpeta
                         </button>
@@ -198,7 +306,6 @@ export default function Entrenar() {
                             </div>
 
                             <div className="flex items-center gap-2">
-                                {/* 🔴 BOTÓN DE EDITAR CARPETA */}
                                 <button
                                     onClick={(e) => abrirModalEditar(nombreCarpeta, e)}
                                     className="p-1.5 hover:bg-blue-100 rounded-lg transition-colors mr-1"
@@ -294,6 +401,29 @@ export default function Entrenar() {
                             </button>
                         </div>
                     </form>
+                </div>
+            )}
+
+            {/* 🔴 3. MODAL DE CARGA IA CANCELABLE */}
+            {importando && (
+                <div className="fixed inset-0 z-[70] flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm transition-opacity">
+                    <div className="bg-white w-full max-w-xs rounded-3xl p-8 shadow-2xl flex flex-col items-center animate-in zoom-in duration-200">
+
+                        <div className="relative flex justify-center items-center mb-6 mt-2">
+                            <div className="absolute animate-ping w-16 h-16 rounded-full bg-blue-100 opacity-75"></div>
+                            <Loader2 size={48} className="animate-spin text-blue-600 relative z-10" />
+                        </div>
+
+                        <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">Analizando rutina...</h3>
+                        <p className="text-gray-500 text-sm text-center mb-8">Nuestra IA está interpretando tu documento.</p>
+
+                        <button
+                            onClick={cancelarImportacion}
+                            className="w-full py-3 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-xl transition-colors active:bg-red-200"
+                        >
+                            Cancelar
+                        </button>
+                    </div>
                 </div>
             )}
 
