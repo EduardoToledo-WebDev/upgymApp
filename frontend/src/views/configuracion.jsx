@@ -2,10 +2,13 @@ import { useState } from "react"; // Necesario para la advertencia
 import { useNavigate } from "react-router-dom";
 import { ChevronRight, HelpCircle, Mail, Star, Users, Info, ArrowLeft, Bell, LogOut, AlertCircle } from "lucide-react";
 import { Preferences } from '@capacitor/preferences';
+import { useContext } from "react";
+import { AppContext } from "../context/AppContext";
 
-const Configuracion = ({ mostrar, setMostrar }) => {
+const Configuracion = () => {
     const navigate = useNavigate();
-    const [mostrarAlerta, setMostrarAlerta] = useState(false); // Estado para la advertencia
+    const { mostrarConfiguracion, setMostrarConfiguracion } = useContext(AppContext);
+    const { mostrarAlerta, setMostrarAlerta } = useContext(AppContext);
 
     // --- Función Final de Cierre ---
     const confirmarCerrarSesion = async () => {
@@ -13,7 +16,7 @@ const Configuracion = ({ mostrar, setMostrar }) => {
         await Preferences.remove({ key: 'token' });
         window.location.href = "/";
         setMostrarAlerta(false);
-        setMostrar(false);
+        setMostrarConfiguracion(false);
     };
 
     const opcionesAyuda = [
@@ -26,11 +29,11 @@ const Configuracion = ({ mostrar, setMostrar }) => {
 
     return (
         <>
-            <div className={`fixed inset-0 h-full z-50 w-full bg-[#f8f9fb] flex flex-col transition-transform duration-300 ${mostrar ? "translate-x-0" : "translate-x-full"}`}>
+            <div className={`fixed inset-0 h-full z-50 w-full bg-[#f8f9fb] flex flex-col transition-transform duration-300 ${mostrarConfiguracion ? "translate-x-0" : "translate-x-full"}`}>
 
                 {/* Header */}
                 <div className="flex items-center p-4 bg-white border-b border-gray-100">
-                    <button onClick={() => setMostrar(false)} className="text-gray-600 p-2"><ArrowLeft size={24} /></button>
+                    <button onClick={() => setMostrarConfiguracion(false)} className="text-gray-600 p-2"><ArrowLeft size={24} /></button>
                     <h1 className="text-xl font-bold flex-1 text-center mr-10 text-[#2d3436]">Ajustes</h1>
                 </div>
 

@@ -3,12 +3,14 @@ import { Login } from '../Login';
 import AppRouter from '../../AppRouter';
 import { Preferences } from '@capacitor/preferences';
 import '../../globalStyles/global.css';
+import { useContext } from 'react';
+import { AppContext } from '../../context/AppContext';
 
 function Main() {
     const API_URL = import.meta.env.VITE_API_URL;
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [userData, setUserData] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const { isAuthenticated, setIsAuthenticated } = useContext(AppContext);
+    const { userData, setUserData } = useContext(AppContext);
+    const { isLoading, setIsLoading } = useContext(AppContext);
 
     const verificarSesion = async () => {
         setIsLoading(true);

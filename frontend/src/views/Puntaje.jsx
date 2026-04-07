@@ -6,15 +6,16 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { Preferences } from '@capacitor/preferences';
 import { imagenes } from '../components/Imagenes/index.jsx'
+import { AppContext } from "../context/AppContext";
+import { useContext } from "react";
 
 const avatar = "https://i.pinimg.com/736x/d0/fe/2a/d0fe2a4e653aa45e7f3646205ad92491.jpg";
 
 function Puntaje() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [userData, setUserData] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const { isLoading, setIsLoading } = useContext(AppContext);
+    const { clasificacionData, setClasificacionData } = useContext(AppContext);
     const API_URL = import.meta.env.VITE_API_URL;
-    const imagenesUsuarios = imagenes(userData.length);
+    const imagenesUsuarios = imagenes(clasificacionData.length);
 
     const ObtenerTop = async () => {
         const { value: tokenGuardado } = await Preferences.get({ key: 'token' });
@@ -29,17 +30,14 @@ function Puntaje() {
             .then(async response => {
                 if (response.ok) {
                     const data = await response.json();
-                    setIsAuthenticated(true);
-                    setUserData(data.user); // Guardamos el { email: '...' } que viene del backend
+                    setClasificacionData(data.user); // Guardamos el { email: '...' } que viene del backend
                     console.log(data.user);
                 } else {
-                    setIsAuthenticated(false);
-                    setUserData(null);
+                    setClasificacionData(null);
                 }
             })
             .catch(error => {
                 console.error("Error validando sesión:", error);
-                setIsAuthenticated(false);
             })
             .finally(() => {
                 setIsLoading(false);
@@ -49,6 +47,7 @@ function Puntaje() {
 
     useEffect(() => {
         ObtenerTop();
+        console.log(clasificacionData)
     }, []);
 
 
@@ -64,7 +63,7 @@ function Puntaje() {
                         <img src={imagenesUsuarios[1]} alt="Top 2" className='img-top2' />
                         <p>2</p>
                         <div className='puntaje-dias'>
-                            <FaFireFlameCurved /> {userData[1]?.racha_act}
+                            <FaFireFlameCurved /> {clasificacionData[1]?.racha_act}
                         </div>
                     </div>
 
@@ -72,7 +71,7 @@ function Puntaje() {
                         <img src={imagenesUsuarios[0]} alt="Top 1" className='img-top1' />
                         <p>1</p>
                         <div className='puntaje-dias top1'>
-                            <FaAward /> {userData[0]?.racha_act}
+                            <FaAward /> {clasificacionData[0]?.racha_act}
                         </div>
                     </div>
 
@@ -80,7 +79,7 @@ function Puntaje() {
                         <img src={imagenesUsuarios[2]} alt="Top 3" className='img-top3' />
                         <p>3</p>
                         <div className='puntaje-dias'>
-                            <FaFireFlameCurved /> {userData[2]?.racha_act}
+                            <FaFireFlameCurved /> {clasificacionData[2]?.racha_act}
                         </div>
                     </div>
 
@@ -96,7 +95,7 @@ function Puntaje() {
                 </thead>
 
                 <tbody className="bg-white divide-y divide-gray-200">
-                    {userData.map((user, index) => (
+                    {clasificacionData.map((user, index) => (
                         <tr key={index}>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="flex items-center">
@@ -124,6 +123,7 @@ function Puntaje() {
 
                         </tr>
                     ))}
+
                 </tbody>
             </table>
         </>

@@ -1,0 +1,81 @@
+import { FaPlay } from "react-icons/fa";
+import { FaDumbbell } from "react-icons/fa6";
+import { useContext } from "react";
+import { AppContext } from "../../../context/AppContext";
+
+function BotonEntreno() {
+
+    const { mostrarCheckin, setMostrarCheckin } = useContext(AppContext);
+    const { validacionUbicacion, setValidacionUbicacion } = useContext(AppContext);
+    const { qrData, setQrData } = useContext(AppContext);
+    const { gimnasio, setGimnasio } = useContext(AppContext);
+    const { segundos, setSegundos } = useContext(AppContext);
+
+    const postDiasRacha = async () => {
+        const { value: tokenGuardado } = await Preferences.get({ key: 'token' });
+        setMostrarCheckin(false);
+        setQrData(null);
+        setGimnasio(null);
+        setValidacionUbicacion(null);
+        setSegundos(0);
+        const response = await fetch(`http://${API_URL}/dias-racha`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${tokenGuardado}`
+            },
+            body: JSON.stringify({
+                id_usuario: userData.id_usuario,
+                ult_activo: new Date().toLocaleDateString("es-MX"),
+                racha_act: rachaUsuario.racha_act + 1,
+                activo: 1,
+            }),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data);
+        }
+
+    };
+    return (
+
+        <>
+            <div className="flex items-center justify-center mt-10">
+                <p className="text-2xl font-bold">Empieza tu rutina!</p>
+            </div>
+            <div className="w-full flex items-center justify-center mt-10 mb-10 hover:scale-102 transition-all duration-300 ">
+                <div className="w-[500px] h-[250px] bg-gradient-to-br from-[#0066FF] via-[#745F8B] to-[#EC5813] rounded-xl flex flex-row items-center justify-center cursor-pointer gap-20">
+                    <div className="flex flex-col items-center text-white gap-2">
+                        <p className="text-3xl font-bold">Pierna Completa</p>
+                        <div className="flex flex-row items-center gap-2">
+                            <p className="text-lg ">12 Ejercicios</p>
+                            <FaDumbbell className="text-white" size={25} />
+                        </div>
+
+                    </div>
+                    <div className="flex flex-col items-center justify-center gap-2  w-[150px] h-[150px] rounded-xl ">
+                        <FaPlay color="#ffffff" size={80} />
+                    </div>
+
+                </div>
+            </div>
+            <div className="flex items-center justify-center">
+                <button
+                    onClick={() => {
+                        postDiasRacha();
+
+                    }}
+                    className="bg-blue-500 text-white p-2 w-40 h-10 rounded-xl cursor-pointer shadow-sm hover:scale-102 transition-all duration-300">Terminar rutina</button>
+            </div>
+
+            {validacionUbicacion ? (
+                <p className="text-green-500 text-center text-md mt-2 relative bottom-0 left-0 right-0 ">Tiempo de entrenamiento: {segundos} segundos</p>
+            ) : (
+                <p className="text-red-500 text-center text-md mt-2 relative bottom-0 left-0 right-0 ">Has salido del gimnasio antes de terminar tu rutina</p>
+            )}
+        </>
+    );
+}
+
+export { BotonEntreno };
