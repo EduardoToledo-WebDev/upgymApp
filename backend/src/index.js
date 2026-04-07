@@ -6,6 +6,7 @@ const cors = require('cors');
 const path = require('path');
 
 app.use('/gifs', express.static(path.join(__dirname, './public/gifs')));
+app.use('/premios', express.static(path.join(__dirname, './public/premios')));
 app.use(cors({
     origin: "*",
     credentials: true

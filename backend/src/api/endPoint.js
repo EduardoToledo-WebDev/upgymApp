@@ -10,6 +10,7 @@ const authController = require('../controllers/authController');
 const clasificacionController = require('../controllers/clasificacionController');
 const rutinasController = require('../controllers/rutinasController');
 const exerciseController = require('../controllers/exerciseController');
+const premiosController = require('../controllers/premiosController');
 
 router.post('/login', login);
 router.post('/register', register);
@@ -25,5 +26,6 @@ router.get('/equipments', exerciseController.getEquipments);
 router.get('/muscles', exerciseController.getMuscles);
 router.put('/carpetas/asignar', rutinasController.asignarCarpeta);
 router.post('/rutinas/importar', upload.single('documento'), rutinasController.importarRutinaIA);
+router.get('/catalogo-premios', premiosController.obtenerCatalogoPremios);
 
 module.exports = router;
