@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Home, Dumbbell, Trophy } from 'lucide-react';
+import { Home, Dumbbell, Trophy, Medal } from 'lucide-react';
 import './layout.css';
 
 export default function Layout({ userData }) {
@@ -26,6 +26,11 @@ export default function Layout({ userData }) {
                 <Link to="/puntaje" className={`nav-item ${location.pathname === '/puntaje' ? 'active' : ''}`}>
                     <Trophy size={24} />
                     <span>PUNTAJE</span>
+                </Link>
+
+                <Link to="/Recompensas" className={`nav-item ${location.pathname === '/Recompensas' ? 'active' : ''}`}>
+                    <Medal size={24} />
+                    <span>RECOMPENSAS</span>
                 </Link>
             </nav>
         </div>

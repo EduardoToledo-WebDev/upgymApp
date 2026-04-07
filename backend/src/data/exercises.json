@@ -1,0 +1,501 @@
+[
+  {
+    "exerciseId": "2ORFMoR",
+    "name": "elevación de pantorrilla en máquina hack",
+    "gifUrl": "2ORFMoR.gif",
+    "targetMuscles": ["pantorrillas"],
+    "bodyParts": ["piernas inferiores"],
+    "equipments": ["máquina de trineo"],
+    "secondaryMuscles": ["isquiotibiales", "glúteos"],
+    "instructions": [
+      "Paso 1: Ajusta la máquina de trineo a un peso cómodo.",
+      "Paso 2: Párate en la máquina con los dedos de los pies en la plataforma y los talones colgando hacia afuera.",
+      "Paso 3: Sujétate de las manijas para mayor estabilidad.",
+      "Paso 4: Eleva los talones lo más alto posible presionando con la parte delantera del pie.",
+      "Paso 5: Haz una pausa de un momento en la parte superior, luego baja lentamente los talones de regreso a la posición inicial.",
+      "Paso 6: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "2Qh2J1e",
+    "name": "prensa de piernas a 45° (vista lateral)",
+    "gifUrl": "2Qh2J1e.gif",
+    "targetMuscles": ["glúteos"],
+    "bodyParts": ["piernas superiores"],
+    "equipments": ["máquina de trineo"],
+    "secondaryMuscles": ["cuádriceps", "isquiotibiales", "pantorrillas"],
+    "instructions": [
+      "Paso 1: Ajusta el asiento de la máquina para que tus rodillas estén en un ángulo de 90 grados cuando tus pies estén en la plataforma.",
+      "Paso 2: Siéntate en la máquina con la espalda plana contra el respaldo y los pies a la anchura de los hombros en la plataforma.",
+      "Paso 3: Sujeta las manijas a los lados del asiento para mayor estabilidad.",
+      "Paso 4: Empuja contra la plataforma para extender las piernas, estirándolas por completo.",
+      "Paso 5: Haz una pausa de un momento en la parte superior, luego dobla lentamente las rodillas para bajar la plataforma a la posición inicial.",
+      "Paso 6: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "3eGE2JC",
+    "name": "elevación frontal con mancuerna",
+    "gifUrl": "3eGE2JC.gif",
+    "targetMuscles": ["deltoides"],
+    "bodyParts": ["hombros"],
+    "equipments": ["mancuerna"],
+    "secondaryMuscles": ["bíceps", "trapecio"],
+    "instructions": [
+      "Paso 1: Párate con los pies a la anchura de los hombros, sosteniendo una mancuerna en cada mano con las palmas mirando hacia tus muslos.",
+      "Paso 2: Manteniendo los brazos rectos, exhala y levanta las mancuernas frente a ti hasta que estén al nivel de los hombros.",
+      "Paso 3: Haz una pausa de un momento en la parte superior, luego inhala y baja lentamente las mancuernas a la posición inicial.",
+      "Paso 4: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "3tAXPQ6",
+    "name": "curl de muñeca inverso con mancuerna sobre banco",
+    "gifUrl": "3tAXPQ6.gif",
+    "targetMuscles": ["antebrazos"],
+    "bodyParts": ["brazos inferiores"],
+    "equipments": ["mancuerna"],
+    "secondaryMuscles": ["bíceps", "braquial"],
+    "instructions": [
+      "Paso 1: Siéntate en un banco con los pies planos en el suelo y sostén una mancuerna en cada mano, con las palmas hacia abajo.",
+      "Paso 2: Apoya los antebrazos en el banco, permitiendo que las muñecas cuelguen del borde.",
+      "Paso 3: Flexiona lentamente las muñecas hacia arriba, llevando las mancuernas hacia tu cuerpo.",
+      "Paso 4: Haz una pausa de un momento en la parte superior, luego baja lentamente las mancuernas a la posición inicial.",
+      "Paso 5: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "3TZduzM",
+    "name": "press de banca inclinado con barra",
+    "gifUrl": "3TZduzM.gif",
+    "targetMuscles": ["pectorales"],
+    "bodyParts": ["pecho"],
+    "equipments": ["barra"],
+    "secondaryMuscles": ["hombros", "tríceps"],
+    "instructions": [
+      "Paso 1: Configura un banco inclinado a un ángulo de 45 grados.",
+      "Paso 2: Acuéstate en el banco con los pies planos en el suelo.",
+      "Paso 3: Sujeta la barra con un agarre prono, ligeramente más ancho que la distancia entre los hombros.",
+      "Paso 4: Saca la barra del soporte y bájala lentamente hacia tu pecho, manteniendo los codos en un ángulo de 45 grados.",
+      "Paso 5: Haz una pausa de un momento en la parte inferior, luego empuja la barra de regreso a la posición inicial.",
+      "Paso 6: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "3XFdb1Z",
+    "name": "curl en cuclillas con cable",
+    "gifUrl": "3XFdb1Z.gif",
+    "targetMuscles": ["bíceps"],
+    "bodyParts": ["brazos superiores"],
+    "equipments": ["cable"],
+    "secondaryMuscles": ["antebrazos"],
+    "instructions": [
+      "Paso 1: Conecta un mango de cable en la configuración más baja de la máquina de cables.",
+      "Paso 2: Párate frente a la máquina con los pies a la anchura de los hombros.",
+      "Paso 3: Sujeta el mango del cable con un agarre supino (palmas hacia arriba) y los brazos completamente extendidos.",
+      "Paso 4: Baja tu cuerpo a una posición de sentadilla, manteniendo la espalda recta y las rodillas detrás de los dedos de los pies.",
+      "Paso 5: Mientras te pones en cuclillas, flexiona el mango del cable hacia tus hombros, manteniendo los codos cerca de los costados.",
+      "Paso 6: Haz una pausa de un momento en la parte superior del curl, apretando los bíceps.",
+      "Paso 7: Baja lentamente el mango del cable a la posición inicial, extendiendo completamente los brazos.",
+      "Paso 8: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "4dF3maG",
+    "name": "curl predicador de martillo a un brazo con mancuerna",
+    "gifUrl": "4dF3maG.gif",
+    "targetMuscles": ["bíceps"],
+    "bodyParts": ["brazos superiores"],
+    "equipments": ["mancuerna"],
+    "secondaryMuscles": ["antebrazos"],
+    "instructions": [
+      "Paso 1: Siéntate en un banco predicador con una mancuerna en una mano y la parte superior del brazo apoyada en la almohadilla.",
+      "Paso 2: Sujeta la mancuerna con un agarre neutro (palmas mirando hacia tu cuerpo).",
+      "Paso 3: Manteniendo la parte superior del brazo inmóvil, exhala y flexiona la mancuerna hacia tu hombro.",
+      "Paso 4: Haz una pausa de un momento en la parte superior, apretando los bíceps.",
+      "Paso 5: Inhala y baja lentamente la mancuerna a la posición inicial.",
+      "Paso 6: Repite para el número deseado de repeticiones, luego cambia de brazo."
+    ]
+  },
+  {
+    "exerciseId": "4dUn2iv",
+    "name": "curl con barra de pie agarre cerrado",
+    "gifUrl": "4dUn2iv.gif",
+    "targetMuscles": ["bíceps"],
+    "bodyParts": ["brazos superiores"],
+    "equipments": ["barra"],
+    "secondaryMuscles": ["antebrazos"],
+    "instructions": [
+      "Paso 1: Párate derecho con los pies a la anchura de los hombros y sujeta una barra con agarre supino, con las manos juntas.",
+      "Paso 2: Mantén los codos cerca de tu torso y la parte superior de los brazos inmóvil durante todo el movimiento.",
+      "Paso 3: Exhala mientras flexionas el peso y contraes tus bíceps. Continúa levantando la barra hasta que los bíceps estén completamente contraídos y la barra esté al nivel de los hombros.",
+      "Paso 4: Mantén la posición contraída por una breve pausa mientras aprietas los bíceps.",
+      "Paso 5: Inhala mientras comienzas a bajar lentamente la barra a la posición inicial.",
+      "Paso 6: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "5bpPTHv",
+    "name": "sentadilla pistol con pesa rusa",
+    "gifUrl": "5bpPTHv.gif",
+    "targetMuscles": ["glúteos"],
+    "bodyParts": ["piernas superiores"],
+    "equipments": ["pesa rusa / kettlebell"],
+    "secondaryMuscles": ["cuádriceps", "isquiotibiales", "pantorrillas"],
+    "instructions": [
+      "Paso 1: Párate con los pies a la anchura de los hombros, sosteniendo una pesa rusa frente a tu pecho con ambas manos.",
+      "Paso 2: Levanta el pie izquierdo del suelo y extiéndelo hacia adelante, manteniéndolo paralelo al suelo.",
+      "Paso 3: Baja lentamente tu cuerpo a una posición de sentadilla, manteniendo el pie derecho plano en el suelo y la pierna izquierda extendida.",
+      "Paso 4: Haz una pausa de un momento en la parte inferior de la sentadilla, luego empuja con el talón derecho para volver a la posición inicial.",
+      "Paso 5: Repite para el número deseado de repeticiones, luego cambia de pierna."
+    ]
+  },
+  {
+    "exerciseId": "05Cf2v8",
+    "name": "fondos imposibles",
+    "gifUrl": "05Cf2v8.gif",
+    "targetMuscles": ["tríceps"],
+    "bodyParts": ["brazos superiores"],
+    "equipments": ["peso corporal"],
+    "secondaryMuscles": ["pecho", "hombros"],
+    "instructions": [
+      "Paso 1: Posiciónate entre dos barras paralelas con los brazos totalmente extendidos y el cuerpo suspendido en el aire.",
+      "Paso 2: Dobla las rodillas y cruza los tobillos.",
+      "Paso 3: Baja tu cuerpo doblando los codos hasta que la parte superior de los brazos esté paralela al suelo.",
+      "Paso 4: Haz una pausa de un momento, luego empújate de regreso a la posición inicial estirando los brazos.",
+      "Paso 5: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "5uFK1xr",
+    "name": "extensión de tríceps sobre la cabeza sentado con barra",
+    "gifUrl": "5uFK1xr.gif",
+    "targetMuscles": ["tríceps"],
+    "bodyParts": ["brazos superiores"],
+    "equipments": ["barra"],
+    "secondaryMuscles": ["hombros"],
+    "instructions": [
+      "Paso 1: Siéntate en un banco con la espalda recta y los pies planos en el suelo.",
+      "Paso 2: Sujeta una barra con agarre prono, con las manos a la anchura de los hombros, y elévala sobre la cabeza.",
+      "Paso 3: Baja la barra detrás de tu cabeza doblando los codos, manteniendo la parte superior de los brazos cerca de la cabeza.",
+      "Paso 4: Haz una pausa de un momento, luego extiende los brazos para elevar la barra de regreso a la posición inicial.",
+      "Paso 5: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "5v7KYld",
+    "name": "press de banca inclinado en máquina smith",
+    "gifUrl": "5v7KYld.gif",
+    "targetMuscles": ["pectorales"],
+    "bodyParts": ["pecho"],
+    "equipments": ["máquina smith"],
+    "secondaryMuscles": ["hombros", "tríceps"],
+    "instructions": [
+      "Paso 1: Ajusta el banco a una inclinación de 30-45 grados.",
+      "Paso 2: Siéntate en el banco con la espalda plana contra la almohadilla y los pies firmemente en el suelo.",
+      "Paso 3: Sujeta la barra con un agarre prono ligeramente más ancho que la distancia entre los hombros.",
+      "Paso 4: Desbloquea la barra y bájala lentamente hacia la parte superior del pecho, manteniendo los codos ligeramente hacia adentro.",
+      "Paso 5: Haz una pausa de un momento en la parte inferior, luego empuja la barra de regreso a la posición inicial, extendiendo completamente los brazos.",
+      "Paso 6: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "6bOA1Oi",
+    "name": "flexión lateral con peso (sobre pelota de estabilidad)",
+    "gifUrl": "6bOA1Oi.gif",
+    "targetMuscles": ["abdominales"],
+    "bodyParts": ["cintura"],
+    "equipments": ["con peso"],
+    "secondaryMuscles": ["oblicuos", "espalda baja"],
+    "instructions": [
+      "Paso 1: Siéntate en una pelota de estabilidad con los pies a la anchura de los hombros y planos en el suelo.",
+      "Paso 2: Sostén una pesa en una mano y coloca la otra mano en tu cadera.",
+      "Paso 3: Involucra tu núcleo y flexiona lentamente de lado hacia el lado del peso, manteniendo la espalda recta.",
+      "Paso 4: Haz una pausa de un momento en la parte inferior, luego regresa lentamente a la posición inicial.",
+      "Paso 5: Repite para el número deseado de repeticiones, luego cambia de lado."
+    ]
+  },
+  {
+    "exerciseId": "6cKQC5E",
+    "name": "remo vertical a un brazo con mancuerna",
+    "gifUrl": "6cKQC5E.gif",
+    "targetMuscles": ["deltoides"],
+    "bodyParts": ["hombros"],
+    "equipments": ["mancuerna"],
+    "secondaryMuscles": ["trapecios", "bíceps"],
+    "instructions": [
+      "Paso 1: Párate con los pies a la anchura de los hombros, sosteniendo una mancuerna en una mano con agarre prono.",
+      "Paso 2: Deja que la mancuerna cuelgue a lo largo del brazo frente a tus muslos, con la palma mirando hacia tu cuerpo.",
+      "Paso 3: Manteniendo la espalda recta y el núcleo activado, exhala y levanta la mancuerna directamente hacia tu barbilla, guiando el movimiento con el codo.",
+      "Paso 4: Haz una pausa de un momento en la parte superior, luego inhala y baja lentamente la mancuerna a la posición inicial.",
+      "Paso 5: Repite para el número deseado de repeticiones, luego cambia al otro brazo."
+    ]
+  },
+  {
+    "exerciseId": "6HiHHe0",
+    "name": "elevación de pantorrilla con balanceo de pie con barra",
+    "gifUrl": "6HiHHe0.gif",
+    "targetMuscles": ["pantorrillas"],
+    "bodyParts": ["piernas inferiores"],
+    "equipments": ["barra"],
+    "secondaryMuscles": ["isquiotibiales", "cuádriceps"],
+    "instructions": [
+      "Paso 1: Párate con los pies a la anchura de los hombros y sostén una barra sobre la parte superior de tu espalda.",
+      "Paso 2: Eleva los talones del suelo lo más alto posible, balanceándote sobre la parte delantera de los pies.",
+      "Paso 3: Baja lentamente los talones de regreso a la posición inicial.",
+      "Paso 4: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "6kSxYnw",
+    "name": "curl de muñeca con barra v. 2",
+    "gifUrl": "6kSxYnw.gif",
+    "targetMuscles": ["antebrazos"],
+    "bodyParts": ["brazos inferiores"],
+    "equipments": ["barra"],
+    "secondaryMuscles": ["bíceps", "braquial"],
+    "instructions": [
+      "Paso 1: Siéntate en un banco con los pies planos en el suelo y las rodillas dobladas.",
+      "Paso 2: Sujeta una barra con agarre supino (palmas hacia arriba) y las manos a la anchura de los hombros.",
+      "Paso 3: Apoya los antebrazos en los muslos, permitiendo que las muñecas cuelguen del borde.",
+      "Paso 4: Flexiona lentamente las muñecas hacia arriba, llevando la barra hacia tus antebrazos.",
+      "Paso 5: Haz una pausa de un momento en la parte superior, luego baja lentamente la barra a la posición inicial.",
+      "Paso 6: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "6MfS53i",
+    "name": "extensión simple acostado con mancuerna",
+    "gifUrl": "6MfS53i.gif",
+    "targetMuscles": ["tríceps"],
+    "bodyParts": ["brazos superiores"],
+    "equipments": ["mancuerna"],
+    "secondaryMuscles": ["hombros"],
+    "instructions": [
+      "Paso 1: Acuéstate en un banco plano con una mancuerna en una mano y el brazo totalmente extendido sobre el pecho.",
+      "Paso 2: Baja la mancuerna de manera controlada hacia tu frente, manteniendo la parte superior del brazo inmóvil.",
+      "Paso 3: Haz una breve pausa en la parte inferior del movimiento, luego extiende el brazo de regreso a la posición inicial.",
+      "Paso 4: Repite para el número deseado de repeticiones, luego cambia de brazo."
+    ]
+  },
+  {
+    "exerciseId": "6sMAmNv",
+    "name": "curl spider inverso con mancuerna",
+    "gifUrl": "6sMAmNv.gif",
+    "targetMuscles": ["bíceps"],
+    "bodyParts": ["brazos superiores"],
+    "equipments": ["mancuerna"],
+    "secondaryMuscles": ["antebrazos"],
+    "instructions": [
+      "Paso 1: Párate derecho con una mancuerna en cada mano, las palmas mirando hacia tu cuerpo y los brazos totalmente extendidos.",
+      "Paso 2: Manteniendo la parte superior de los brazos inmóvil, exhala y flexiona el peso mientras contraes los bíceps.",
+      "Paso 3: Continúa levantando las mancuernas hasta que los bíceps estén completamente contraídos y las mancuernas al nivel de los hombros.",
+      "Paso 4: Mantén la posición contraída por una breve pausa mientras aprietas los bíceps.",
+      "Paso 5: Inhala y comienza a bajar lentamente las mancuernas a la posición inicial.",
+      "Paso 6: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "6sYyrRX",
+    "name": "giro acostado con rodillas dobladas (masculino)",
+    "gifUrl": "6sYyrRX.gif",
+    "targetMuscles": ["glúteos"],
+    "bodyParts": ["piernas superiores"],
+    "equipments": ["peso corporal"],
+    "secondaryMuscles": ["oblicuos", "flexores de la cadera"],
+    "instructions": [
+      "Paso 1: Acuéstate boca arriba con las rodillas dobladas y los pies planos en el suelo.",
+      "Paso 2: Extiende los brazos hacia los lados, perpendiculares a tu cuerpo.",
+      "Paso 3: Manteniendo las rodillas juntas, bájalas lentamente hacia un lado, intentando tocar el suelo.",
+      "Paso 4: Haz una pausa de un momento, luego involucra tu núcleo y levanta lentamente las rodillas de regreso a la posición inicial.",
+      "Paso 5: Repite el movimiento hacia el otro lado.",
+      "Paso 6: Continúa alternando lados para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "7F1DVzn",
+    "name": "jalón frontal en máquina de palanca",
+    "gifUrl": "7F1DVzn.gif",
+    "targetMuscles": ["dorsales"],
+    "bodyParts": ["espalda"],
+    "equipments": ["máquina de palanca"],
+    "secondaryMuscles": ["bíceps", "romboides", "deltoides posteriores"],
+    "instructions": [
+      "Paso 1: Ajusta la altura del asiento y colócate en la máquina con las rodillas bajo las almohadillas y los pies planos en el suelo.",
+      "Paso 2: Sujeta las manijas con un agarre prono, ligeramente más ancho que la distancia entre los hombros.",
+      "Paso 3: Siéntate erguido con el pecho elevado y los hombros hacia atrás, manteniendo un ligero arco en la espalda baja.",
+      "Paso 4: Involucra tus dorsales y tira de las manijas hacia abajo, hacia tu pecho, juntando los omóplatos.",
+      "Paso 5: Haz una pausa de un momento en la parte inferior del movimiento, luego suelta lentamente las manijas de regreso a la posición inicial.",
+      "Paso 6: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "7I6LNUG",
+    "name": "remo sentado en máquina de palanca",
+    "gifUrl": "7I6LNUG.gif",
+    "targetMuscles": ["espalda superior"],
+    "bodyParts": ["espalda"],
+    "equipments": ["máquina de palanca"],
+    "secondaryMuscles": ["bíceps", "antebrazos"],
+    "instructions": [
+      "Paso 1: Ajusta la altura del asiento y los reposapiés a una posición cómoda.",
+      "Paso 2: Siéntate en la máquina con el pecho contra la almohadilla y los pies en los reposapiés.",
+      "Paso 3: Sujeta las manijas con un agarre prono, a la anchura de los hombros.",
+      "Paso 4: Mantén la espalda recta y el núcleo activado.",
+      "Paso 5: Tira de las manijas hacia tu cuerpo, juntando los omóplatos.",
+      "Paso 6: Haz una pausa de un momento en el pico del movimiento.",
+      "Paso 7: Suelta lentamente las manijas y regresa a la posición inicial.",
+      "Paso 8: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "7inpWch",
+    "name": "curl de concentración de pie con mancuerna",
+    "gifUrl": "7inpWch.gif",
+    "targetMuscles": ["bíceps"],
+    "bodyParts": ["brazos superiores"],
+    "equipments": ["mancuerna"],
+    "secondaryMuscles": ["antebrazos"],
+    "instructions": [
+      "Paso 1: Párate con los pies a la anchura de los hombros y sostén una mancuerna en una mano, con el brazo totalmente extendido y la palma hacia adentro.",
+      "Paso 2: Coloca la mano opuesta en tu muslo para apoyo.",
+      "Paso 3: Manteniendo la parte superior del brazo inmóvil, exhala y flexiona la mancuerna hacia tu hombro contrayendo el bíceps.",
+      "Paso 4: Continúa levantando la mancuerna hasta que el bíceps esté totalmente contraído y la mancuerna al nivel del hombro.",
+      "Paso 5: Mantén la posición contraída por una breve pausa mientras aprietas el bíceps.",
+      "Paso 6: Inhala y baja lentamente la mancuerna a la posición inicial.",
+      "Paso 7: Repite para el número deseado de repeticiones, luego cambia de brazo."
+    ]
+  },
+  {
+    "exerciseId": "7saC5zz",
+    "name": "apertura declinada con cable",
+    "gifUrl": "7saC5zz.gif",
+    "targetMuscles": ["pectorales"],
+    "bodyParts": ["pecho"],
+    "equipments": ["cable"],
+    "secondaryMuscles": ["hombros", "tríceps"],
+    "instructions": [
+      "Paso 1: Ajusta la máquina de cables a una posición declinada.",
+      "Paso 2: Párate de espaldas a la máquina con los pies a la anchura de los hombros.",
+      "Paso 3: Sujeta las manijas con las palmas hacia adelante y los brazos extendidos frente a ti.",
+      "Paso 4: Manteniendo una ligera flexión en los codos, abre los brazos hacia los lados en un movimiento controlado.",
+      "Paso 5: Haz una pausa de un momento en la posición de máxima extensión, luego regresa lentamente a la posición inicial.",
+      "Paso 6: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "7zdxRTl",
+    "name": "prensa de piernas en máquina smith",
+    "gifUrl": "7zdxRTl.gif",
+    "targetMuscles": ["glúteos"],
+    "bodyParts": ["piernas superiores"],
+    "equipments": ["máquina smith"],
+    "secondaryMuscles": ["cuádriceps", "isquiotibiales", "pantorrillas"],
+    "instructions": [
+      "Paso 1: Ajusta el asiento y la plataforma de la máquina smith a una posición cómoda.",
+      "Paso 2: Siéntate en la máquina con la espalda contra el respaldo y los pies a la anchura de los hombros en la plataforma.",
+      "Paso 3: Sujeta las manijas o los lados de la máquina para mayor estabilidad.",
+      "Paso 4: Empuja la plataforma lejos de ti extendiendo las piernas, manteniendo la espalda contra el respaldo.",
+      "Paso 5: Haz una pausa de un momento en la posición de máxima extensión.",
+      "Paso 6: Dobla lentamente las rodillas y baja la plataforma hacia ti, regresando a la posición inicial.",
+      "Paso 7: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "8eqjhOl",
+    "name": "press de banca inclinado con mancuernas palmas hacia adentro",
+    "gifUrl": "8eqjhOl.gif",
+    "targetMuscles": ["tríceps"],
+    "bodyParts": ["brazos superiores"],
+    "equipments": ["mancuerna"],
+    "secondaryMuscles": ["pecho", "hombros"],
+    "instructions": [
+      "Paso 1: Configura un banco inclinado a un ángulo de 45 grados.",
+      "Paso 2: Siéntate en el banco con la espalda contra el respaldo y los pies planos en el suelo.",
+      "Paso 3: Sostén una mancuerna en cada mano con agarre neutro (palmas hacia adentro).",
+      "Paso 4: Extiende los brazos hacia arriba sobre tu pecho, manteniendo una ligera flexión en los codos.",
+      "Paso 5: Baja las mancuernas lentamente hacia tus hombros, manteniendo los codos cerca de tu cuerpo.",
+      "Paso 6: Haz una pausa de un momento en la parte inferior, luego presiona las mancuernas de regreso a la posición inicial.",
+      "Paso 7: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "8K0w2yA",
+    "name": "elevación de rodillas colgado asistido con descenso explosivo",
+    "gifUrl": "8K0w2yA.gif",
+    "targetMuscles": ["abdominales"],
+    "bodyParts": ["cintura"],
+    "equipments": ["asistido"],
+    "secondaryMuscles": ["flexores de la cadera", "espalda baja"],
+    "instructions": [
+      "Paso 1: Cuélgate de una barra de dominadas con los brazos totalmente extendidos y las palmas hacia afuera.",
+      "Paso 2: Involucra tu núcleo y levanta las rodillas hacia tu pecho, manteniendo las piernas juntas.",
+      "Paso 3: Una vez que las rodillas estén al nivel del pecho, lanza explosivamente tus piernas hacia abajo, extendiéndolas por completo.",
+      "Paso 4: Permite que tus piernas se balanceen hacia arriba y repite el movimiento para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "8oYqOt9",
+    "name": "curl sentado con cable",
+    "gifUrl": "8oYqOt9.gif",
+    "targetMuscles": ["bíceps"],
+    "bodyParts": ["brazos superiores"],
+    "equipments": ["cable"],
+    "secondaryMuscles": ["antebrazos"],
+    "instructions": [
+      "Paso 1: Siéntate en una máquina de cables con los pies planos en el suelo y la espalda recta.",
+      "Paso 2: Sujeta el accesorio de cable con agarre supino (palmas hacia arriba) y los brazos totalmente extendidos.",
+      "Paso 3: Manteniendo la parte superior de los brazos inmóvil, exhala y flexiona el accesorio hacia tus hombros, contrayendo los bíceps.",
+      "Paso 4: Haz una pausa de un momento en la parte superior del movimiento, apretando los bíceps.",
+      "Paso 5: Inhala y baja lentamente el accesorio de cable a la posición inicial, extendiendo totalmente los brazos.",
+      "Paso 6: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "8ozhUIZ",
+    "name": "elevación de pantorrilla de pie con barra",
+    "gifUrl": "8ozhUIZ.gif",
+    "targetMuscles": ["pantorrillas"],
+    "bodyParts": ["piernas inferiores"],
+    "equipments": ["barra"],
+    "secondaryMuscles": ["isquiotibiales", "glúteos"],
+    "instructions": [
+      "Paso 1: Párate con los pies a la anchura de los hombros y coloca una barra sobre la parte superior de tu espalda.",
+      "Paso 2: Eleva los talones del suelo lo más alto posible, usando solo los dedos de los pies.",
+      "Paso 3: Haz una pausa de un momento en la parte superior, luego baja lentamente los talones a la posición inicial.",
+      "Paso 4: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "8urJS9b",
+    "name": "hiperextensión con peso (sobre pelota de estabilidad)",
+    "gifUrl": "8urJS9b.gif",
+    "targetMuscles": ["columna"],
+    "bodyParts": ["espalda"],
+    "equipments": ["con peso"],
+    "secondaryMuscles": ["glúteos", "isquiotibiales"],
+    "instructions": [
+      "Paso 1: Colócate boca abajo en una pelota de estabilidad con las caderas apoyadas en la pelota y los pies contra una pared para estabilidad.",
+      "Paso 2: Coloca tus manos detrás de tu cabeza o crúzalas sobre tu pecho.",
+      "Paso 3: Involucra tu núcleo y levanta lentamente la parte superior del cuerpo de la pelota, extendiendo la espalda hasta que tu cuerpo forme una línea recta.",
+      "Paso 4: Haz una pausa de un momento en la parte superior, luego baja lentamente la parte superior del cuerpo a la posición inicial.",
+      "Paso 5: Repite para el número deseado de repeticiones."
+    ]
+  },
+  {
+    "exerciseId": "8xUv4J7",
+    "name": "crunch sentado con cable",
+    "gifUrl": "8xUv4J7.gif",
+    "targetMuscles": ["abdominales"],
+    "bodyParts": ["cintura"],
+    "equipments": ["cable"],
+    "secondaryMuscles": ["oblicuos"],
+    "instructions": [
+      "Paso 1: Siéntate en una máquina de cables con los pies planos en el suelo y las rodillas dobladas.",
+      "Paso 2: Sujeta el mango del cable con ambas manos y colócalo detrás de tu cabeza.",
+      "Paso 3: Involucra tus abdominales y flexiona lentamente la parte superior de tu cuerpo hacia adelante, llevando el pecho hacia tus rodillas.",
+      "Paso 4: Haz una pausa de un momento en la parte superior, luego regresa lentamente a la posición inicial.",
+      "Paso 5: Repite para el número deseado de repeticiones."
+    ]
+  }
+]
