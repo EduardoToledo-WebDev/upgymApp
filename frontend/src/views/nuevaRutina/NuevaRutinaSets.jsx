@@ -1,5 +1,7 @@
 import { ArrowLeft, RefreshCw } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
+import { Toaster, toast } from 'sonner';
+import { feedback } from "../../utils/haptics";
 const API_URL = import.meta.env.VITE_API_URL;
 import { Preferences } from "@capacitor/preferences";
 
@@ -144,15 +146,20 @@ const NuevaRutinaSets = ({ paso, nombreRutina, grupoRutina, ejercicios, volverAt
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                feedback.success();
+                toast.success('Rutina guardada correctamente');
                 cerrarVentana();
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                feedback.error();
+                toast.error('Error al guardar la rutina');
+                console.error('Error:', error)
+            });
     };
 
     return (
         <div className={`fixed inset-0 z-50 bg-gray-50 flex flex-col transform transition-transform duration-300 ease-in-out ${paso === 2 ? "translate-x-0" : "translate-x-full"}`}>
-
+            <Toaster position="bottom-center" expand={false} richColors closeButton />
             <div className="flex items-center justify-between px-4 h-20 border-b border-gray-200 shrink-0 bg-white z-20 shadow-sm">
                 <div className="w-1/4">
                     <button onClick={volverAtras} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
