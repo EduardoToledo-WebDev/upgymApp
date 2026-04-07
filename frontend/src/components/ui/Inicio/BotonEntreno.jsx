@@ -4,11 +4,40 @@ import { useContext } from "react";
 import { AppContext } from "../../../context/AppContext";
 
 function BotonEntreno() {
+
     const { mostrarCheckin, setMostrarCheckin } = useContext(AppContext);
     const { validacionUbicacion, setValidacionUbicacion } = useContext(AppContext);
     const { qrData, setQrData } = useContext(AppContext);
     const { gimnasio, setGimnasio } = useContext(AppContext);
     const { segundos, setSegundos } = useContext(AppContext);
+
+    const postDiasRacha = async () => {
+        const { value: tokenGuardado } = await Preferences.get({ key: 'token' });
+        setMostrarCheckin(false);
+        setQrData(null);
+        setGimnasio(null);
+        setValidacionUbicacion(null);
+        setSegundos(0);
+        const response = await fetch(`http://${API_URL}/dias-racha`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${tokenGuardado}`
+            },
+            body: JSON.stringify({
+                id_usuario: userData.id_usuario,
+                ult_activo: new Date().toLocaleDateString("es-MX"),
+                racha_act: rachaUsuario.racha_act + 1,
+                activo: 1,
+            }),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data);
+        }
+
+    };
     return (
 
         <>
@@ -34,19 +63,16 @@ function BotonEntreno() {
             <div className="flex items-center justify-center">
                 <button
                     onClick={() => {
-                        setMostrarCheckin(false);
-                        setQrData(null);
-                        setGimnasio(null);
-                        setValidacionUbicacion(null);
-                        setSegundos(0);
+                        postDiasRacha();
+
                     }}
                     className="bg-blue-500 text-white p-2 w-40 h-10 rounded-xl cursor-pointer shadow-sm hover:scale-102 transition-all duration-300">Terminar rutina</button>
             </div>
 
             {validacionUbicacion ? (
-                <p className="text-green-500 text-center text-md mt-2 relative bottom-0 left-0 right-0 ">Ubicacion correcta</p>
+                <p className="text-green-500 text-center text-md mt-2 relative bottom-0 left-0 right-0 ">Tiempo de entrenamiento: {segundos} segundos</p>
             ) : (
-                <p className="text-red-500 text-center text-md mt-2 relative bottom-0 left-0 right-0 ">Ubicacion incorrecta</p>
+                <p className="text-red-500 text-center text-md mt-2 relative bottom-0 left-0 right-0 ">Has salido del gimnasio antes de terminar tu rutina</p>
             )}
         </>
     );
