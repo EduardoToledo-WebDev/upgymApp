@@ -29,6 +29,9 @@ importers:
       '@capacitor/ios':
         specifier: ^8.2.0
         version: 8.2.0(@capacitor/core@8.2.0)
+      '@capacitor/local-notifications':
+        specifier: ^8.0.2
+        version: 8.0.2(@capacitor/core@8.2.0)
       '@capacitor/preferences':
         specifier: ^8.0.1
         version: 8.0.1(@capacitor/core@8.2.0)
@@ -185,6 +188,9 @@ packages:
 
   '@capacitor/geolocation@8.1.0':
     resolution: {integrity: sha512-dHeGuVlT3ELxxn8WaoRsGjfx8tmziaC0ZuaKhUBCoKFjOue4fAnmLczCMQsYW7OykgiyBh0pirNPwWZ0/LXB7Q==}
+    peerDependencies:
+      '@capacitor/core': '>=8.0.0'
+
   '@capacitor/haptics@8.0.2':
     resolution: {integrity: sha512-c2hZzRR5Fk1tbTvhG1jhh2XBAf3EhnIerMIb2sl7Mt41Gxx1fhBJFDa0/BI1IbY4loVepyyuqNC9820/GZuoWQ==}
     peerDependencies:
@@ -195,17 +201,23 @@ packages:
     peerDependencies:
       '@capacitor/core': ^8.2.0
 
+  '@capacitor/local-notifications@8.0.2':
+    resolution: {integrity: sha512-X7KE/I4ZutMTGVHNUyTjIugYcQEcHJRLks+TsPnOriuS+lo0geSTuaRln6zAZlJSSXSoVMSSzHexdSbIjR/8iw==}
+    peerDependencies:
+      '@capacitor/core': '>=8.0.0'
+
   '@capacitor/preferences@8.0.1':
     resolution: {integrity: sha512-T6no3ebi79XJCk91U3Jp/liJUwgBdvHR+s6vhvPkPxSuch7z3zx5Rv1bdWM6sWruNx+pViuEGqZvbfCdyBvcHQ==}
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
 
-  '@capacitor/synapse@1.0.4':
-    resolution: {integrity: sha512-/C1FUo8/OkKuAT4nCIu/34ny9siNHr9qtFezu4kxm6GY1wNFxrCFWjfYx5C1tUhVGz3fxBABegupkpjXvjCHrw==}
   '@capacitor/splash-screen@8.0.1':
     resolution: {integrity: sha512-c/ew/Z3eA7z8l06WoRAtzVF16VwYYrExmHmfGq1Cg675pVzaC/yuucB8/1xG1vhEfnW4fZ1KhSf/kzR1RiVYgg==}
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
+
+  '@capacitor/synapse@1.0.4':
+    resolution: {integrity: sha512-/C1FUo8/OkKuAT4nCIu/34ny9siNHr9qtFezu4kxm6GY1wNFxrCFWjfYx5C1tUhVGz3fxBABegupkpjXvjCHrw==}
 
   '@emnapi/core@1.9.0':
     resolution: {integrity: sha512-0DQ98G9ZQZOxfUcQn1waV2yS8aWdZ6kJMbYCJB3oUBecjWYO1fqJ+a1DRfPF3O5JEkwqwP1A9QEN/9mYm2Yd0w==}
@@ -1636,6 +1648,7 @@ snapshots:
     dependencies:
       '@capacitor/core': 8.2.0
       '@capacitor/synapse': 1.0.4
+
   '@capacitor/haptics@8.0.2(@capacitor/core@8.2.0)':
     dependencies:
       '@capacitor/core': 8.2.0
@@ -1644,14 +1657,19 @@ snapshots:
     dependencies:
       '@capacitor/core': 8.2.0
 
+  '@capacitor/local-notifications@8.0.2(@capacitor/core@8.2.0)':
+    dependencies:
+      '@capacitor/core': 8.2.0
+
   '@capacitor/preferences@8.0.1(@capacitor/core@8.2.0)':
     dependencies:
       '@capacitor/core': 8.2.0
 
-  '@capacitor/synapse@1.0.4': {}
   '@capacitor/splash-screen@8.0.1(@capacitor/core@8.2.0)':
     dependencies:
       '@capacitor/core': 8.2.0
+
+  '@capacitor/synapse@1.0.4': {}
 
   '@emnapi/core@1.9.0':
     dependencies:

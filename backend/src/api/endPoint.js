@@ -6,10 +6,10 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 const { login } = require('../controllers/loginController');
 const { register } = require('../controllers/registerController');
-const { logout } = require('../controllers/logoutController');
+
 const { gimnasioController } = require('../controllers/gimnasioController');
-const userRutineController = require('../controllers/userRutineController');
-const getUserRutineController = require('../controllers/getUserRutineController');
+
+
 const checkinController = require('../controllers/checkinController');
 const diasRachaController = require('../controllers/diasRachaController');
 const authController = require('../controllers/authController');
@@ -23,9 +23,8 @@ router.post('/register', register);
 router.get('/verify-session', authController.verifySession);
 router.get('/clasificacion', clasificacionController.verifySession);
 router.get("/gimnasio/:id", gimnasioController);
-router.post('/nueva-rutina', userRutineController.crearRutina);
-router.post('/checkin', checkinController.crearCheckin);
-router.get('/dias-racha/:id', diasRachaController.obtenerDiasRachaUsuario);
+router.post('/checkin/iniciar', checkinController.iniciarCheckin);
+router.put('/checkin/terminar', checkinController.terminarCheckin);
 router.get('/rutinas', rutinasController.obtenerRutinas);
 router.post('/rutinas', rutinasController.crearRutina);
 router.put('/rutinas/:id', rutinasController.editarRutina);

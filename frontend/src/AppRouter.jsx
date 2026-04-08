@@ -19,6 +19,7 @@ export default function AppRouter({ userData }) {
 
                 </Route>
             </Routes>
+
         </HashRouter>
     );
 }

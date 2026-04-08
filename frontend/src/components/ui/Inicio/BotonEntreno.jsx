@@ -1,80 +1,87 @@
-import { FaPlay } from "react-icons/fa";
-import { FaDumbbell } from "react-icons/fa6";
+import { FaDumbbell, FaLocationDot, FaCircleStop } from "react-icons/fa6";
 import { useContext } from "react";
 import { AppContext } from "../../../context/AppContext";
+import { Preferences } from '@capacitor/preferences';
+import { LocalNotifications } from '@capacitor/local-notifications';
 
 function BotonEntreno() {
+    const {
+        userData, setUserData, validacionUbicacion, setGimnasio, gimnasio,
+        segundos, setSegundos, idCheckinActual, setIdCheckinActual,
+        setSesionActiva, setRutinaEmpezada, setMostrarCheckin
+    } = useContext(AppContext);
 
-    const { mostrarCheckin, setMostrarCheckin } = useContext(AppContext);
-    const { validacionUbicacion, setValidacionUbicacion } = useContext(AppContext);
-    const { qrData, setQrData } = useContext(AppContext);
-    const { gimnasio, setGimnasio } = useContext(AppContext);
-    const { segundos, setSegundos } = useContext(AppContext);
+    const API_URL = import.meta.env.VITE_API_URL;
+    const mins = Math.floor(segundos / 60);
+    const segs = String(segundos % 60).padStart(2, '0');
 
-    const postDiasRacha = async () => {
-        const { value: tokenGuardado } = await Preferences.get({ key: 'token' });
-        setMostrarCheckin(false);
-        setQrData(null);
-        setGimnasio(null);
-        setValidacionUbicacion(null);
-        setSegundos(0);
-        const response = await fetch(`http://${API_URL}/dias-racha`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${tokenGuardado}`
-            },
-            body: JSON.stringify({
-                id_usuario: userData.id_usuario,
-                ult_activo: new Date().toLocaleDateString("es-MX"),
-                racha_act: rachaUsuario.racha_act + 1,
-                activo: 1,
-            }),
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log(data);
-        }
-
+    const finalizarRutina = async () => {
+        const { value: token } = await Preferences.get({ key: 'token' });
+        try {
+            const resp = await fetch(`http://${API_URL}/checkin/terminar`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+                body: JSON.stringify({ id_checkin: idCheckinActual, duracion_minutos: Math.max(1, mins) }),
+            });
+            if (resp.ok) {
+                await LocalNotifications.cancel({ notifications: [{ id: 1 }] });
+                await Preferences.remove({ key: 'active_session' });
+                setUserData(prev => ({ ...prev, racha_act: (prev.racha_act || 0) + 1, estado_racha: 'Activa' }));
+                setSesionActiva(false); setRutinaEmpezada(false); setGimnasio(null); setSegundos(0); setMostrarCheckin(true);
+            }
+        } catch (e) { console.error(e); }
     };
+
+    const getStatusColor = () => {
+        if (validacionUbicacion === null) return "from-slate-700 to-slate-800";
+        return validacionUbicacion ? "from-blue-600 to-indigo-700" : "from-red-500 to-red-600";
+    };
+
     return (
+        /* 🔴 MARGEN IGUAL AL DE RACHACARD */
+        <div className="px-6 mt-6 w-full">
+            <div className={`w-full bg-gradient-to-br ${getStatusColor()} rounded-[2.5rem] p-7 text-white shadow-xl relative overflow-hidden transition-all duration-500`}>
 
-        <>
-            <div className="flex items-center justify-center mt-10">
-                <p className="text-2xl font-bold">Empieza tu rutina!</p>
-            </div>
-            <div className="w-full flex items-center justify-center mt-10 mb-10 hover:scale-102 transition-all duration-300 ">
-                <div className="w-[500px] h-[250px] bg-gradient-to-br from-[#0066FF] via-[#745F8B] to-[#EC5813] rounded-xl flex flex-row items-center justify-center cursor-pointer gap-20">
-                    <div className="flex flex-col items-center text-white gap-2">
-                        <p className="text-3xl font-bold">Pierna Completa</p>
-                        <div className="flex flex-row items-center gap-2">
-                            <p className="text-lg ">12 Ejercicios</p>
-                            <FaDumbbell className="text-white" size={25} />
-                        </div>
-
+                {/* HEADER: Nombre y GPS */}
+                <div className="flex justify-between items-start mb-10">
+                    <div className="flex flex-col gap-1">
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60">Entrenando en</span>
+                        <h2 className="text-xl font-black italic uppercase tracking-tight leading-none">
+                            {gimnasio?.nombre || "Cargando..."}
+                        </h2>
                     </div>
-                    <div className="flex flex-col items-center justify-center gap-2  w-[150px] h-[150px] rounded-xl ">
-                        <FaPlay color="#ffffff" size={80} />
+                    <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-wider backdrop-blur-md border border-white/10 ${validacionUbicacion ? 'bg-green-500/20' : 'bg-white/10'}`}>
+                        <div className={`w-1.5 h-1.5 rounded-full ${validacionUbicacion ? 'bg-green-400 animate-pulse' : 'bg-white/40'}`}></div>
+                        {validacionUbicacion ? "En rango" : "Buscando"}
                     </div>
+                </div>
 
+                {/* CONTADOR CENTRAL: Ahora con mucho más aire */}
+                <div className="flex flex-col items-center mb-10">
+                    <p className="text-6xl font-mono font-black tracking-tighter drop-shadow-lg">
+                        {mins}<span className="opacity-40">:</span>{segs}
+                    </p>
+                    <div className="flex items-center gap-2 mt-2 opacity-60">
+                        <FaDumbbell size={12} />
+                        <span className="text-[10px] font-bold uppercase tracking-[0.3em]">Tiempo Total</span>
+                    </div>
+                </div>
+
+                {/* BOTÓN: Integrado pero con su propio nivel visual */}
+                <button
+                    onClick={finalizarRutina}
+                    className="w-full bg-white text-slate-900 h-16 rounded-[1.5rem] flex items-center justify-center gap-3 font-black text-xs uppercase tracking-[0.2em] shadow-lg active:scale-[0.97] transition-all"
+                >
+                    <FaCircleStop className="text-red-500" size={18} />
+                    Finalizar Sesión
+                </button>
+
+                {/* Decoración sutil de fondo para que no se vea vacío */}
+                <div className="absolute -right-4 -bottom-4 opacity-10">
+                    <FaDumbbell size={120} />
                 </div>
             </div>
-            <div className="flex items-center justify-center">
-                <button
-                    onClick={() => {
-                        postDiasRacha();
-
-                    }}
-                    className="bg-blue-500 text-white p-2 w-40 h-10 rounded-xl cursor-pointer shadow-sm hover:scale-102 transition-all duration-300">Terminar rutina</button>
-            </div>
-
-            {validacionUbicacion ? (
-                <p className="text-green-500 text-center text-md mt-2 relative bottom-0 left-0 right-0 ">Tiempo de entrenamiento: {segundos} segundos</p>
-            ) : (
-                <p className="text-red-500 text-center text-md mt-2 relative bottom-0 left-0 right-0 ">Has salido del gimnasio antes de terminar tu rutina</p>
-            )}
-        </>
+        </div>
     );
 }
 

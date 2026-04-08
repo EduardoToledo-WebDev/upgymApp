@@ -1,12 +1,14 @@
 import { ArrowLeft, Play, Dumbbell, Timer, Repeat, MoreVertical, Pencil, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Preferences } from "@capacitor/preferences";
+import { AppContext } from "../context/AppContext";
 const API_URL = import.meta.env.VITE_API_URL;
 
 // 🔴 1. Agregamos "abrirEdicion" a los props
 const RutinasDetalles = ({ detalleView, setDetalleView, rutina, actualizarLista, abrirEdicion }) => {
     const [menuAbierto, setMenuAbierto] = useState(false);
     const [confirmarEliminar, setConfirmarEliminar] = useState(false);
+    const { sesionActiva, idCheckinActual, inicializarStepper } = useContext(AppContext);
 
     const ejecutarEliminacion = async () => {
         try {
@@ -52,13 +54,10 @@ const RutinasDetalles = ({ detalleView, setDetalleView, rutina, actualizarLista,
                         <button onClick={() => setMenuAbierto(!menuAbierto)} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                             <MoreVertical size={24} className="text-gray-800" />
                         </button>
-
-                        {/* Menú Desplegable */}
                         {menuAbierto && (
                             <div className="absolute top-12 right-0 mt-1 w-40 bg-white border border-gray-200 rounded-xl shadow-lg z-50 py-2 overflow-hidden">
                                 <button
                                     onClick={() => {
-                                        // 🔴 2. Activamos la función para ir a Editar
                                         if (abrirEdicion) abrirEdicion();
                                         setMenuAbierto(false);
                                     }}
@@ -143,13 +142,30 @@ const RutinasDetalles = ({ detalleView, setDetalleView, rutina, actualizarLista,
                 </div>
 
                 {/* 3. PIE DE PÁGINA */}
-                <div className="shrink-0 bg-white border-t border-gray-200 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] pb-6">
-                    <button className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-lg py-4 rounded-xl shadow-md transition-colors flex items-center justify-center gap-2">
-                        <Play size={24} fill="currentColor" /> Empezar Entrenamiento
-                    </button>
-                </div>
-            </div>
+                {sesionActiva ? (
+                    <div className="shrink-0 bg-white border-t border-gray-200 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] pb-6">
+                        <button
+                            // 🔴 AQUÍ ESTÁ LA MAGIA DEL CLICK
+                            onClick={async () => {
+                                // 1. Construye el "Mega-Objeto" y lo guarda en Preferences
+                                await inicializarStepper(rutina, idCheckinActual);
 
+                                // 2. Cierra este panel lateral para que el usuario pueda ver el Stepper
+                                setDetalleView(false);
+                            }}
+                            className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-lg py-4 rounded-xl shadow-md transition-colors flex items-center justify-center gap-2"
+                        >
+                            <Play size={24} fill="currentColor" /> Empezar Entrenamiento
+                        </button>
+                    </div>
+                ) : (
+                    <div className="shrink-0 bg-white border-t border-gray-200 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] pb-6">
+                        <button className="w-full bg-slate-300 text-white font-bold text-lg py-4 rounded-xl flex items-center justify-center gap-2 cursor-not-allowed">
+                            Primero haz check-in para entrenar
+                        </button>
+                    </div>
+                )}
+            </div>
             {/* MODAL DE CONFIRMACIÓN DE ELIMINACIÓN */}
             {confirmarEliminar && (
                 <div className="fixed inset-0 flex items-center justify-center p-6 bg-black/50 backdrop-blur-sm" style={{ zIndex: 100 }}>
