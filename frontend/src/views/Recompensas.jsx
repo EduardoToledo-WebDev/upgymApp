@@ -58,37 +58,37 @@ const Recompensas = () => {
 
             <div className='flex flex-col w-auto mx-5 mt-6 gap-6'>
                 {premios
-                    // 🔴 FIX: Convertimos a minúsculas por si en BD dice "Ropa" en vez de "ropa"
+
                     .filter(premio => chipActiva === 'todos' || (premio.categoria && premio.categoria.toLowerCase() === chipActiva))
-                    // 🔴 FIX: Cambié la variable iteradora a 'premio' (singular) para no confundir a React
+
                     .map(premio => (
-                        // 🔴 FIX: Usamos premio.id_premio
+
                         <div key={premio.id_premio} className='flex flex-col w-full rounded-3xl border border-gray-200 bg-white overflow-hidden shadow-sm'>
 
-                            {/* CONTENEDOR DE IMAGEN Y BADGES (Forma correcta de posicionar elementos) */}
+
                             <div className="relative w-full h-48 bg-gray-200">
-                                {/* 🔴 FIX: La ruta correcta que armamos en Express es /premios/ */}
+
                                 <img
                                     className='w-full h-full object-cover'
                                     src={`http://${API_URL}/premios/${premio.img_path}`}
                                     alt={premio.nombre}
                                 />
 
-                                {/* Badge de Categoría (Arriba Izquierda) */}
+
                                 <span className='absolute top-3 left-3 bg-blue-500/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1.5 rounded-full capitalize shadow-md'>
                                     {premio.categoria}
                                 </span>
 
-                                {/* Badge de Precio (Abajo Derecha) */}
-                                {/* 🔴 FIX: Usamos premio.costo en vez de premio.precio */}
+
+
                                 <div className='absolute bottom-3 right-3 bg-white/95 backdrop-blur-sm text-orange-500 text-lg font-black px-4 py-1.5 rounded-full shadow-lg flex items-center gap-1'>
                                     {premio.costo} <span className='text-gray-400 text-[10px] uppercase tracking-wider mt-1'>PTS</span>
                                 </div>
                             </div>
 
-                            {/* INFORMACIÓN Y BOTÓN */}
+
                             <div className="p-5 flex flex-col gap-2">
-                                {/* 🔴 FIX: Usamos premio.nombre */}
+
                                 <h2 className='text-gray-900 font-bold text-xl leading-tight'>{premio.nombre}</h2>
                                 <p className='text-gray-500 text-sm leading-relaxed'>{premio.descripcion}</p>
 
@@ -100,7 +100,6 @@ const Recompensas = () => {
                     ))
                 }
 
-                {/* Estado vacío por si no hay premios en esa categoría */}
                 {premios.filter(premio => chipActiva === 'todos' || (premio.categoria && premio.categoria.toLowerCase() === chipActiva)).length === 0 && (
                     <div className="text-center text-gray-400 mt-10">
                         <p>No hay recompensas en esta categoría por ahora.</p>
