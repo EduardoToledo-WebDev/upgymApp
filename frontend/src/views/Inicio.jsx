@@ -11,6 +11,7 @@ import { Preferences } from '@capacitor/preferences';
 import { App } from '@capacitor/app';
 import { Geolocation } from '@capacitor/geolocation';
 import { LocalNotifications } from '@capacitor/local-notifications';
+import { Toaster } from "sonner";
 
 export default function Inicio() {
     const {
@@ -18,6 +19,7 @@ export default function Inicio() {
         setSesionActiva, setIdCheckinActual, setSegundos,
         rutinaEmpezada, setRutinaEmpezada, setGimnasio,
         setValidacionUbicacion, gimnasio,
+        sesionActiva,
         // 🔴 2. TRAEMOS EL ESTADO DEL ENTRENAMIENTO (Para saber si el Stepper debe verse)
         entrenamientoState, setEntrenamientoState
     } = useContext(AppContext);
@@ -36,14 +38,7 @@ export default function Inicio() {
             setRutinaEmpezada(true);
             setGimnasio(sesion.gimnasio);
 
-            await LocalNotifications.schedule({
-                notifications: [{
-                    id: 1,
-                    title: `Entrenando en ${sesion.gimnasio.nombre}`,
-                    body: `Tu sesión sigue activa.`,
-                    ongoing: true, sticky: true
-                }]
-            });
+
         }
 
         // --- B. RECUPERAR EL STEPPER (Si el usuario estaba a mitad de rutina) ---
@@ -54,6 +49,35 @@ export default function Inicio() {
             setEntrenamientoState(null);
         }
     };
+    // 🔴 NUEVO EFECTO: Control de Notificación Global
+    useEffect(() => {
+        const gestionarNotificacionActiva = async () => {
+            try {
+                if (sesionActiva && gimnasio) {
+                    // Si hay sesión, mostramos la notificación "Sticky"
+                    await LocalNotifications.schedule({
+                        notifications: [{
+                            id: 1, // ID fijo para poder manipularla después
+                            title: `Entrenando en ${gimnasio.nombre}`,
+                            body: `Tu sesión sigue activa. Toca para volver.`,
+                            ongoing: true, // Android: No se puede quitar deslizando
+                            sticky: true,  // Android: Notificación persistente
+                            // extra: { route: '/inicio' } // Opcional por si quieres que al tocarla haga algo
+                        }]
+                    });
+                } else {
+                    // Si la sesión NO está activa, cancelamos específicamente la notificación con ID 1
+                    await LocalNotifications.cancel({
+                        notifications: [{ id: 1 }]
+                    });
+                }
+            } catch (error) {
+                console.error("Error gestionando la notificación:", error);
+            }
+        };
+
+        gestionarNotificacionActiva();
+    }, [sesionActiva, gimnasio]); // Se dispara cada vez que sesionActiva o el gimnasio cambian
 
     // GPS PERSISTENTE
     useEffect(() => {
@@ -97,6 +121,7 @@ export default function Inicio() {
     return (
         // 🔴 4. Agregamos "relative" al contenedor principal para que el Stepper pueda cubrirlo
         <div className="flex flex-col w-full h-full bg-slate-50 relative">
+            <Toaster position="bottom-center" expand={false} richColors closeButton />
             <Header userData={userData} mostrarConfiguracion={mostrarConfiguracion} setMostrarConfiguracion={setMostrarConfiguracion} />
             <RachaCard />
             <Configuracion mostrar={mostrarConfiguracion} setMostrar={setMostrarConfiguracion} />

@@ -3,6 +3,8 @@ import { useContext } from "react";
 import { AppContext } from "../../../context/AppContext";
 import { Preferences } from '@capacitor/preferences';
 import { LocalNotifications } from '@capacitor/local-notifications';
+import { toast, Toaster } from "sonner";
+import { feedback } from "../../../utils/haptics";
 
 function BotonEntreno() {
     const {
@@ -26,7 +28,27 @@ function BotonEntreno() {
             if (resp.ok) {
                 await LocalNotifications.cancel({ notifications: [{ id: 1 }] });
                 await Preferences.remove({ key: 'active_session' });
-                setUserData(prev => ({ ...prev, racha_act: (prev.racha_act || 0) + 1, estado_racha: 'Activa' }));
+                if (userData.estado_racha === 'Inactiva') {
+                    const nuevaRacha = (userData.racha_act || 0) + 1;
+                    setUserData(prev => ({ ...prev, racha_act: nuevaRacha, estado_racha: 'Activa' }));
+                    setUserData(prev => ({ ...prev, puntos: (prev.puntos || 0) + 50 }));
+                    feedback.success();
+                    toast.success("¡Racha conseguida! 🔥", {
+                        description: `Llevas ${nuevaRacha} días entrenando.`
+                    });
+
+                } else if (userData.estado_racha === 'Activa') {
+                    feedback.success();
+                    toast.success("¡Sesión finalizada! 💪", {
+                        description: "Tu racha ya estaba activa por hoy. ¡Buen esfuerzo extra!"
+                    });
+                }
+                else {
+                    feedback.error();
+                    toast.error("¡Error al finalizar la sesión!", {
+                        description: "Intenta nuevamente."
+                    });
+                }
                 setSesionActiva(false); setRutinaEmpezada(false); setGimnasio(null); setSegundos(0); setMostrarCheckin(true);
             }
         } catch (e) { console.error(e); }
@@ -40,6 +62,7 @@ function BotonEntreno() {
     return (
         /* 🔴 MARGEN IGUAL AL DE RACHACARD */
         <div className="px-6 mt-6 w-full">
+
             <div className={`w-full bg-gradient-to-br ${getStatusColor()} rounded-[2.5rem] p-7 text-white shadow-xl relative overflow-hidden transition-all duration-500`}>
 
                 {/* HEADER: Nombre y GPS */}

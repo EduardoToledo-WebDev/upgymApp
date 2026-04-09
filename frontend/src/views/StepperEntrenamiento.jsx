@@ -3,10 +3,11 @@ import { AppContext } from "../context/AppContext";
 import { Preferences } from "@capacitor/preferences";
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
 import { Check, Timer, X, Play, Dumbbell, Trophy } from "lucide-react";
+import { LocalNotifications } from "@capacitor/local-notifications";
 
 const StepperEntrenamiento = () => {
     const { entrenamientoState, setEntrenamientoState } = useContext(AppContext);
-
+    const API_URL = import.meta.env.VITE_API_URL;
     const [isVisible, setIsVisible] = useState(false);
     const [pesoInput, setPesoInput] = useState("");
     const [repsInput, setRepsInput] = useState("");
@@ -41,6 +42,65 @@ const StepperEntrenamiento = () => {
         return () => clearInterval(interval);
     }, [entrenamientoState]);
 
+    useEffect(() => {
+        const gestionarNotificaciones = async () => {
+            // Si no hay estado, limpiamos cualquier notificación fantasma y salimos
+            if (!entrenamientoState || !entrenamientoState.tracker) {
+                await LocalNotifications.cancel({ notifications: [{ id: 2 }, { id: 3 }] });
+                return;
+            }
+
+            const { tracker, ejercicios } = entrenamientoState;
+            const ejercicioActual = ejercicios[tracker.ejercicioActualIndex];
+
+            try {
+                if (tracker.fase === "descanso") {
+                    // Lógica segura para saber qué sigue sin salirnos del array
+                    let textoSiguiente = "Siguiente serie";
+                    if (tracker.serieActualIndex === ejercicioActual.series_totales - 1) {
+                        if (tracker.ejercicioActualIndex + 1 < ejercicios.length) {
+                            textoSiguiente = ejercicios[tracker.ejercicioActualIndex + 1].nombre_ejercicio;
+                        }
+                    } else {
+                        textoSiguiente = ejercicioActual.nombre_ejercicio;
+                    }
+
+                    await LocalNotifications.schedule({
+                        notifications: [{
+                            id: 2,
+                            title: `Descanso: ${ejercicioActual.descanso_segundos}s`,
+                            body: `Prepárate para: ${textoSiguiente}`,
+                            ongoing: true, sticky: true
+                        }]
+                    });
+                    // Borramos la notificación de ejecución
+                    await LocalNotifications.cancel({ notifications: [{ id: 3 }] });
+
+                } else if (tracker.fase === "ejecucion") {
+                    await LocalNotifications.schedule({
+                        notifications: [{
+                            id: 3,
+                            title: `Entrenando: ${ejercicioActual.nombre_ejercicio}`,
+                            body: `Serie ${tracker.serieActualIndex + 1} de ${ejercicioActual.series_totales}`,
+                            ongoing: true, sticky: true
+                        }]
+                    });
+                    // Borramos la notificación de descanso
+                    await LocalNotifications.cancel({ notifications: [{ id: 2 }] });
+
+                } else if (tracker.fase === "finalizado") {
+                    // Si terminó, borramos ambas
+                    await LocalNotifications.cancel({ notifications: [{ id: 2 }, { id: 3 }] });
+                }
+            } catch (error) {
+                console.error("Error con las notificaciones del stepper:", error);
+            }
+        };
+
+        gestionarNotificaciones();
+        // Se ejecuta cada que cambia la fase, la serie o el ejercicio
+    }, [entrenamientoState?.tracker?.fase, entrenamientoState?.tracker?.serieActualIndex, entrenamientoState?.tracker?.ejercicioActualIndex]);
+
     const guardarEstadoPersistente = async (nuevoEstado) => {
         setEntrenamientoState(nuevoEstado);
         await Preferences.set({ key: 'workout_state', value: JSON.stringify(nuevoEstado) });
@@ -62,14 +122,38 @@ const StepperEntrenamiento = () => {
                     id_checkin: entrenamientoState.id_checkin,
                     id_rutina_ejercicio: ej.id_rutina_ejercicio,
                     serie_numero: log.serie_numero,
-                    repeticiones: parseInt(log.repeticiones, 10) || 0,
-                    peso_kg: parseFloat(log.peso_kg) || 0
+                    repeticiones: parseInt(log.repeticiones, 10) || null,
+                    peso_kg: parseFloat(log.peso_kg) || null
                 });
             });
         });
 
         console.log("JSON FINAL PARA MYSQL:", logsParaBD);
-        // Aquí ejecutas tu fetch masivo a la BD
+
+
+        if (logsParaBD.length > 0) {
+            try {
+                const token = await Preferences.get({ key: 'token' });
+                const res = await fetch(`http://${API_URL}/progreso/guardar_progreso`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token.value}`
+                    },
+                    body: JSON.stringify({ logs: logsParaBD })
+                });
+
+                const data = await res.json();
+                if (data.valid) {
+                    console.log("¡Éxito! Progreso guardado en la BD.");
+                } else {
+                    console.error("Error del servidor:", data.message);
+                }
+            } catch (error) {
+                console.error("Error de red al guardar progreso:", error);
+            }
+        }
+
         cerrarStepperConAnimacion();
     };
 
@@ -154,8 +238,9 @@ const StepperEntrenamiento = () => {
                                 <img src={`http://${import.meta.env.VITE_API_URL}/gifs/${ejercicioActual.gif_url}`} alt="ejercicio" className="w-full h-full object-contain" />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center"><Dumbbell size={64} className="text-slate-200" /></div>
-                            )}
-                        </div>
+                            )
+                            }
+                        </div >
 
                         <div className="flex-1 flex flex-col px-8 py-6">
                             <h2 className="text-3xl font-black text-slate-900 leading-tight uppercase tracking-tight mb-1 italic">{ejercicioActual.nombre_ejercicio}</h2>
@@ -172,7 +257,7 @@ const StepperEntrenamiento = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div >
                 ) : tracker.fase === "descanso" ? (
                     <div className="flex-1 flex flex-col items-center justify-center bg-slate-50 animate-in fade-in duration-500">
                         <Timer size={48} className="text-blue-500 mb-4" />
@@ -186,10 +271,10 @@ const StepperEntrenamiento = () => {
                             <Trophy size={48} className="text-white" />
                         </div>
                         <h2 className="text-4xl font-black text-slate-900 text-center uppercase tracking-tighter leading-none mb-4 italic">¡Rutina<br />Completada!</h2>
-                        <p className="text-slate-400 text-center text-sm font-medium leading-relaxed">Has terminado todos los ejercicios. Tus resultados están listos para guardarse.</p>
+                        <p className="text-slate-400 text-center text-sm font-medium leading-relaxed">Has terminado todos los ejercicios. ¡Bien hecho!</p>
                     </div>
                 )}
-            </div>
+            </div >
 
             <div className="px-6 py-6 pb-10 bg-white">
                 {tracker.fase === "ejecucion" ? (
@@ -202,25 +287,27 @@ const StepperEntrenamiento = () => {
                     </button>
                 ) : (
                     <button onClick={finalizarRutinaYEnviar} className="w-full h-16 bg-blue-600 text-white font-black text-sm uppercase tracking-widest rounded-2xl active:scale-[0.98] transition-all shadow-lg shadow-blue-500/30">
-                        Guardar y Salir
+                        Salir
                     </button>
                 )}
             </div>
 
             {/* MODAL CANCELAR */}
-            {mostrarModalCancelar && (
-                <div className="fixed inset-0 bg-slate-900/60 z-[200] flex items-center justify-center p-6 animate-in fade-in duration-200">
-                    <div className="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl animate-in zoom-in-95">
-                        <h3 className="text-2xl font-black text-slate-900 mb-2 uppercase tracking-tighter italic">¿Cancelar?</h3>
-                        <p className="text-slate-500 text-sm mb-8 font-medium">Se perderá el progreso de esta rutina.</p>
-                        <div className="flex flex-col gap-3">
-                            <button onClick={cancelarRutina} className="w-full h-14 bg-red-50 text-red-600 font-bold uppercase tracking-widest rounded-2xl text-xs">Sí, cancelar</button>
-                            <button onClick={() => setMostrarModalCancelar(false)} className="w-full h-14 bg-slate-100 text-slate-900 font-bold uppercase tracking-widest rounded-2xl text-xs">Volver</button>
+            {
+                mostrarModalCancelar && (
+                    <div className="fixed inset-0 bg-slate-900/60 z-[200] flex items-center justify-center p-6 animate-in fade-in duration-200">
+                        <div className="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl animate-in zoom-in-95">
+                            <h3 className="text-2xl font-black text-slate-900 mb-2 uppercase tracking-tighter italic">¿Cancelar?</h3>
+                            <p className="text-slate-500 text-sm mb-8 font-medium">Se perderá el progreso de esta rutina.</p>
+                            <div className="flex flex-col gap-3">
+                                <button onClick={cancelarRutina} className="w-full h-14 bg-red-50 text-red-600 font-bold uppercase tracking-widest rounded-2xl text-xs">Sí, cancelar</button>
+                                <button onClick={() => setMostrarModalCancelar(false)} className="w-full h-14 bg-slate-100 text-slate-900 font-bold uppercase tracking-widest rounded-2xl text-xs">Volver</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 };
 
